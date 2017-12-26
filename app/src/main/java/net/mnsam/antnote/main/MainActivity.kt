@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val noteList = mutableListOf<Note>()
-        var note : Note = Note(null, "eat", "eat cake", "eat straw cake")
+        var note = Note(null, "eat", "eat cake", "eat straw cake")
         noteList.add(note)
         note = Note(null, "run", "morning run", "using red shoes")
         noteList.add(note)
