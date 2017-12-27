@@ -1,4 +1,4 @@
-package net.mnsam.antnote.model
+package net.mnsam.antnote.main.database.model
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey

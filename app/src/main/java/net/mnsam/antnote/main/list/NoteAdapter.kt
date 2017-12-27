@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_note.view.*
 import net.mnsam.antnote.R
-import net.mnsam.antnote.model.Note
+import net.mnsam.antnote.main.database.model.Note
 
 /**
  * Created by Mochamad Noor Syamsu on 12/26/17.

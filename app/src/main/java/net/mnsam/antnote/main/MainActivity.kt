@@ -5,8 +5,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import net.mnsam.antnote.R
+import net.mnsam.antnote.main.database.model.Note
 import net.mnsam.antnote.main.list.NoteAdapter
-import net.mnsam.antnote.model.Note
 
 class MainActivity : AppCompatActivity() {
 
