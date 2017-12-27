@@ -21,8 +21,8 @@ abstract class NoteRoomDatabase(val context: Context) : RoomDatabase() {
             synchronized(NoteRoomDatabase::class) {
                 if (INSTANCE === null)
                     INSTANCE = Room.databaseBuilder(context.applicationContext,
-                            NoteRoomDatabase::class,
-                            "note_database")
+                            NoteRoomDatabase::class.java,
+                            "note_database").build()
             }
         return INSTANCE
     }
