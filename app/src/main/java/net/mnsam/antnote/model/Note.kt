@@ -1,7 +1,6 @@
 package net.mnsam.antnote.model
 
 import android.arch.persistence.room.Entity
-import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 
 /**
@@ -11,6 +10,5 @@ import android.arch.persistence.room.PrimaryKey
         data class Note(
         @PrimaryKey(autoGenerate = true) var id: Long? = null,
         var title: String,
-        @Ignore var shortContent: String,
         var content: String
 )

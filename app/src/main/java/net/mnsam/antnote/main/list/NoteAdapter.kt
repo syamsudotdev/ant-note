@@ -16,7 +16,7 @@ class NoteAdapter(val noteList: MutableList<Note>) : RecyclerView.Adapter<NoteAd
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(note: Note) {
             itemView.noteTitle.text = note.title
-            itemView.shortContent.text = note.shortContent
+            itemView.content.text = note.content
         }
     }
 
