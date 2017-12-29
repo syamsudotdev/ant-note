@@ -5,7 +5,7 @@ import android.arch.lifecycle.LiveData
 import android.os.AsyncTask
 import net.mnsam.antnote.main.database.NoteRoomDatabase
 import net.mnsam.antnote.main.database.dao.NoteDao
-import net.mnsam.antnote.main.database.model.Note
+import net.mnsam.antnote.main.database.entity.Note
 
 /**
  * Created by Mochamad Noor Syamsu on 12/27/17.
@@ -15,7 +15,7 @@ class NoteRepository(application: Application) {
     private val allNotes: LiveData<MutableList<Note>>
 
     init {
-        val db: NoteRoomDatabase = NoteRoomDatabase.getDatabase(application.baseContext)!!
+        val db: NoteRoomDatabase = NoteRoomDatabase.getDatabase(application.baseContext)
         noteDao = db.noteDao
         allNotes = noteDao.getAllNotes()
     }
@@ -24,7 +24,7 @@ class NoteRepository(application: Application) {
         insertAsyncTask(noteDao).execute(note)
     }
 
-    private class insertAsyncTask constructor(private val asyncTaskDao: NoteDao) : AsyncTask<Note, Void, Void>() {
+    private class insertAsyncTask(private val asyncTaskDao: NoteDao) : AsyncTask<Note, Void, Void>() {
         override fun doInBackground(vararg params: Note): Void? {
             asyncTaskDao.insert(params[0])
             return null

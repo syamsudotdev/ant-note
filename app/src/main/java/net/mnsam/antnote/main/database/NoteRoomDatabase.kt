@@ -5,7 +5,7 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import net.mnsam.antnote.main.database.dao.NoteDao
-import net.mnsam.antnote.main.database.model.Note
+import net.mnsam.antnote.main.database.entity.Note
 
 /**
  * Created by Mochamad Noor Syamsu on 12/27/17.
@@ -18,7 +18,7 @@ abstract class NoteRoomDatabase : RoomDatabase() {
     companion object {
         private var INSTANCE: NoteRoomDatabase? = null
 
-        fun getDatabase(context: Context): NoteRoomDatabase? {
+        fun getDatabase(context: Context): NoteRoomDatabase {
             if (INSTANCE === null)
                 synchronized(NoteRoomDatabase::class) {
                     if (INSTANCE === null)
@@ -26,7 +26,7 @@ abstract class NoteRoomDatabase : RoomDatabase() {
                                 NoteRoomDatabase::class.java,
                                 "ant_note").build()
                 }
-            return INSTANCE
+            return INSTANCE!!
         }
     }
 }
