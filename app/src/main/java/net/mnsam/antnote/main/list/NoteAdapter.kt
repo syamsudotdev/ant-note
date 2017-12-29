@@ -11,7 +11,7 @@ import net.mnsam.antnote.main.database.entity.Note
 /**
  * Created by Mochamad Noor Syamsu on 12/26/17.
  */
-class NoteAdapter(val noteList: MutableList<Note>) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
+class NoteAdapter(private var noteList: MutableList<Note>) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(note: Note) {
@@ -31,4 +31,6 @@ class NoteAdapter(val noteList: MutableList<Note>) : RecyclerView.Adapter<NoteAd
                 inflate(R.layout.item_note, parent, false)
         return ViewHolder(view)
     }
+
+    fun addList(noteList: List<Note>) = this.noteList.addAll(noteList)
 }
