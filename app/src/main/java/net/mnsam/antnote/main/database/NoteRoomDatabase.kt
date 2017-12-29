@@ -14,7 +14,7 @@ import net.mnsam.antnote.main.database.model.Note
 @Database(entities = [Note::class], version = 1)
 abstract class NoteRoomDatabase(val context: Context) : RoomDatabase() {
     abstract var noteDao: NoteDao
-    var INSTANCE: NoteRoomDatabase? = null
+    private var INSTANCE: NoteRoomDatabase? = null
 
     fun getDatabase(): NoteRoomDatabase? {
         if (INSTANCE === null)
