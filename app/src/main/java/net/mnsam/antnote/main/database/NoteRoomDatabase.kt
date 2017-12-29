@@ -15,18 +15,16 @@ import net.mnsam.antnote.main.database.entity.Note
 abstract class NoteRoomDatabase : RoomDatabase() {
     abstract var noteDao: NoteDao
 
-    companion object {
-        private var INSTANCE: NoteRoomDatabase? = null
+    private var INSTANCE: NoteRoomDatabase? = null
 
-        fun getDatabase(context: Context): NoteRoomDatabase {
-            if (INSTANCE === null)
-                synchronized(NoteRoomDatabase::class) {
-                    if (INSTANCE === null)
-                        INSTANCE = Room.databaseBuilder(context.applicationContext,
-                                NoteRoomDatabase::class.java,
-                                "ant_note").build()
-                }
-            return INSTANCE!!
-        }
+    fun getDatabase(context: Context): NoteRoomDatabase {
+        if (INSTANCE === null)
+            synchronized(NoteRoomDatabase::class) {
+                if (INSTANCE === null)
+                    INSTANCE = Room.databaseBuilder(context.applicationContext,
+                            NoteRoomDatabase::class.java,
+                            "ant_note").build()
+            }
+        return INSTANCE!!
     }
 }
