@@ -1,7 +1,8 @@
 package net.mnsam.antnote.main.database.repository
 
+import android.arch.lifecycle.LiveData
 import android.os.AsyncTask
-import net.mnsam.antnote.main.ApplicationDatabase
+import net.mnsam.antnote.main.database.ApplicationDatabase
 import net.mnsam.antnote.main.database.dao.NoteDao
 import net.mnsam.antnote.main.database.entity.Note
 
@@ -10,6 +11,8 @@ import net.mnsam.antnote.main.database.entity.Note
  */
 open class NoteRepository {
     private val noteDao: NoteDao = ApplicationDatabase.database.noteDao
+
+    fun getAllNotes(): LiveData<MutableList<Note>> = noteDao.getAllNotes()
 
     fun insert(note: Note) {
         InsertAsyncTask(noteDao).execute(note)

@@ -1,10 +1,9 @@
-package net.mnsam.antnote.main
+package net.mnsam.antnote.main.database
 
 import android.app.Application
 import android.arch.persistence.room.Room
 import android.content.Context
 import android.support.multidex.MultiDex
-import net.mnsam.antnote.main.database.NoteRoomDatabase
 
 /**
  * Created by Mochamad Noor Syamsu on 12/29/17.

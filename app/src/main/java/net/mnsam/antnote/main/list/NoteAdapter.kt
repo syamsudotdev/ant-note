@@ -32,5 +32,5 @@ class NoteAdapter(private var noteList: MutableList<Note>) : RecyclerView.Adapte
         return ViewHolder(view)
     }
 
-    fun addList(noteList: List<Note>) = this.noteList.addAll(noteList)
+    fun addList(noteList: MutableList<Note>?) = this.noteList.addAll(noteList!!)
 }
