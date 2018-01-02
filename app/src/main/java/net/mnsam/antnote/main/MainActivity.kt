@@ -13,10 +13,8 @@ import net.mnsam.antnote.main.list.NoteAdapter
 import net.mnsam.antnote.main.viewmodel.NoteViewModel
 
 class MainActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         Stetho.initializeWithDefaults(this)
         setContentView(R.layout.activity_main)
 
