@@ -8,8 +8,8 @@ import android.support.v7.widget.LinearLayoutManager
 import com.facebook.stetho.Stetho
 import kotlinx.android.synthetic.main.activity_main.*
 import net.mnsam.antnote.R
+import net.mnsam.antnote.main.adapter.NoteAdapter
 import net.mnsam.antnote.main.database.entity.Note
-import net.mnsam.antnote.main.list.NoteAdapter
 import net.mnsam.antnote.main.viewmodel.NoteViewModel
 
 class MainActivity : AppCompatActivity() {

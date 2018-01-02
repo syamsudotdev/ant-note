@@ -1,4 +1,4 @@
-package net.mnsam.antnote.main.list
+package net.mnsam.antnote.main.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
