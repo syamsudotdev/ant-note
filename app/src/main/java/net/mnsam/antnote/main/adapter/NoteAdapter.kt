@@ -6,12 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_note.view.*
 import net.mnsam.antnote.R
-import net.mnsam.antnote.main.database.entity.Note
+import net.mnsam.antnote.datastorage.local.entity.Note
 
 /**
  * Created by Mochamad Noor Syamsu on 12/26/17.
  */
-class NoteAdapter(private var noteList: MutableList<Note>) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
+class NoteAdapter : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
+
+    private var noteList = mutableListOf<Note>()
+    var adapterClickListener: AdapterClickListener? = null
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(note: Note) {

@@ -1,4 +1,4 @@
-package net.mnsam.antnote.main.database.entity
+package net.mnsam.antnote.datastorage.local.entity
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity

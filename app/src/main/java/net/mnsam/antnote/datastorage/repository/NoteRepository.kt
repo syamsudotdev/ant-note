@@ -1,16 +1,16 @@
-package net.mnsam.antnote.main.database.repository
+package net.mnsam.antnote.datastorage.repository
 
 import android.arch.lifecycle.LiveData
 import android.os.AsyncTask
 import net.mnsam.antnote.ApplicationBase
-import net.mnsam.antnote.main.database.dao.NoteDao
-import net.mnsam.antnote.main.database.entity.Note
+import net.mnsam.antnote.datastorage.local.dao.NoteDao
+import net.mnsam.antnote.datastorage.local.entity.Note
 
 /**
  * Created by Mochamad Noor Syamsu on 12/27/17.
  */
 open class NoteRepository {
-    private val noteDao: NoteDao = ApplicationBase.database.noteDao
+    private val noteDao: NoteDao = ApplicationBase.roomDatabase.noteDao
 
     fun getAllNotes(): LiveData<MutableList<Note>> = noteDao.getAllNotes()
 
@@ -24,4 +24,6 @@ open class NoteRepository {
             return null
         }
     }
+
+    fun getNoteDetail(id: Long): Note = noteDao.findById(id)
 }
