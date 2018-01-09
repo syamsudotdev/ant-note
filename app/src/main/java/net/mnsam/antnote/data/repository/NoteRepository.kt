@@ -1,10 +1,9 @@
-package net.mnsam.antnote.datastorage.repository
+package net.mnsam.antnote.data.repository
 
-import android.arch.lifecycle.LiveData
 import android.os.AsyncTask
 import net.mnsam.antnote.ApplicationBase
-import net.mnsam.antnote.datastorage.local.dao.NoteDao
-import net.mnsam.antnote.datastorage.local.entity.Note
+import net.mnsam.antnote.data.local.dao.NoteDao
+import net.mnsam.antnote.data.local.entity.Note
 
 /**
  * Created by Mochamad Noor Syamsu on 12/27/17.
@@ -12,7 +11,7 @@ import net.mnsam.antnote.datastorage.local.entity.Note
 open class NoteRepository {
     private val noteDao: NoteDao = ApplicationBase.roomDatabase.noteDao
 
-    fun getAllNotes(): LiveData<MutableList<Note>> = noteDao.getAllNotes()
+    fun fetchAllNotes(): MutableList<Note> = noteDao.getAllNotes()
 
     fun insert(note: Note) {
         InsertAsyncTask(noteDao).execute(note)

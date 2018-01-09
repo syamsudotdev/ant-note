@@ -1,7 +1,7 @@
 package net.mnsam.antnote.main.presentation
 
 import net.mnsam.antnote.base.BaseView
-import net.mnsam.antnote.datastorage.local.entity.Note
+import net.mnsam.antnote.data.local.entity.Note
 import net.mnsam.antnote.main.adapter.NoteAdapter
 
 /**
@@ -9,6 +9,7 @@ import net.mnsam.antnote.main.adapter.NoteAdapter
  */
 interface MainView : BaseView {
     fun showList(list: MutableList<Note>)
-    fun showDetail(note: Note)
+    fun showEmptyList()
+    fun navigateToDetail(id: Long)
     fun setClickListener(noteAdapter: NoteAdapter)
 }

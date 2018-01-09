@@ -1,7 +1,6 @@
 package net.mnsam.antnote.main
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -10,26 +9,25 @@ import android.widget.Toast
 import com.facebook.stetho.Stetho
 import kotlinx.android.synthetic.main.activity_main.*
 import net.mnsam.antnote.R
-import net.mnsam.antnote.datastorage.local.entity.Note
-import net.mnsam.antnote.main.adapter.AdapterClickListener
+import net.mnsam.antnote.data.local.entity.Note
+import net.mnsam.antnote.data.repository.NoteRepository
 import net.mnsam.antnote.main.adapter.NoteAdapter
+import net.mnsam.antnote.main.presentation.MainPresenter
 import net.mnsam.antnote.main.presentation.MainView
 import net.mnsam.antnote.main.presentation.implementation.MainPresenterImpl
-import net.mnsam.antnote.main.viewmodel.NoteViewModel
 
 class MainActivity : AppCompatActivity(), MainView {
 
     private val noteList = mutableListOf<Note>()
-    val mainPresenter = MainPresenterImpl(noteList)
-    val noteViewModel: NoteViewModel =
-            ViewModelProviders.of(this).get(NoteViewModel::class.java)
+    private val noteRepository = object : NoteRepository()
+    private val mainPresenter: MainPresenter = MainPresenterImpl(this, noteList, noteRepository)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Stetho.initializeWithDefaults(this)
         setContentView(R.layout.activity_main)
 
-        showList(noteList)
+        mainPresenter.onCreate()
     }
 
     override fun toastMessage(message: String) {
@@ -42,19 +40,25 @@ class MainActivity : AppCompatActivity(), MainView {
 
     override fun showList(list: MutableList<Note>) {
         val noteAdapter = NoteAdapter()
-        noteViewModel.getAllNotes().observe(this,
-                Observer<MutableList<Note>> { noteList -> noteAdapter.addList(noteList) })
         setClickListener(noteAdapter)
         listItem.adapter = noteAdapter
         listItem.layoutManager = LinearLayoutManager(this)
     }
 
-    override fun showDetail(note: Note) {}
+    override fun showEmptyList() {
+        //TODO: show "Empty"
+    }
+
+    override fun navigateToDetail(id: Long) {
+        val intent = Intent()//current act, next act
+        intent.putExtra("idNote", id)
+        startActivity(intent)
+    }
 
     override fun setClickListener(noteAdapter: NoteAdapter) {
-        noteAdapter.adapterClickListener = object : AdapterClickListener {
+        noteAdapter.adapterClickListener = object : NoteAdapter.AdapterClickListener {
             override fun onItemClick(view: View, position: Int) {
-
+                mainPresenter.onListItemClick(position)
             }
         }
     }

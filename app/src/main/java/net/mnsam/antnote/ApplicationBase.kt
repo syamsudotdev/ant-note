@@ -4,7 +4,7 @@ import android.app.Application
 import android.arch.persistence.room.Room
 import android.content.Context
 import android.support.multidex.MultiDex
-import net.mnsam.antnote.datastorage.local.ApplicationRoomDatabase
+import net.mnsam.antnote.data.local.ApplicationRoomDatabase
 
 /**
  * Created by Mochamad Noor Syamsu on 12/29/17.
