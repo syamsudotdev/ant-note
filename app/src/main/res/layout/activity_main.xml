@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundDark"
-    tools:context="net.mnsam.antnote.main.MainActivity">
+    tools:context=".feature.list.MainActivity">
 
     <TextView
         android:id="@+id/emptyList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="You have no notes"
+        android:text="@string/message_no_notes"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -35,12 +35,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_note_add_white_24dp"
-        app:fabSize="normal"
+        app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.9" />
+        app:layout_constraintVertical_bias="0.95" />
 
 </android.support.constraint.ConstraintLayout>

@@ -1,4 +1,4 @@
-package net.mnsam.antnote.main.adapter
+package net.mnsam.antnote.feature.list.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -42,5 +42,8 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
         return ViewHolder(view)
     }
 
-    fun addList(noteList: MutableList<Note>?) = this.noteList.addAll(noteList!!)
+    fun changeDataSet(noteList: MutableList<Note>) {
+        this.noteList = noteList
+        notifyDataSetChanged()
+    }
 }
