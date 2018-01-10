@@ -13,7 +13,7 @@ Libraries :
 - [ ] Delete note
 - [ ] Firebase for storing data remotely
 - [ ] Client side data encryption with asymetric key
-- [ ] Store private key to remote
+- [ ] Store private key to remote (using archive and password)
 - [ ] Store private key offline as an image
 
 ### Make it optional for :

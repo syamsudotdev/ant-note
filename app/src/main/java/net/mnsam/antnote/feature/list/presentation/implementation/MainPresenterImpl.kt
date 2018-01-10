@@ -31,6 +31,6 @@ class MainPresenterImpl(private val mainView: MainView, private val list: Mutabl
     }
 
     override fun onFabClick() {
-
+        mainView.navigateToCreate()
     }
 }

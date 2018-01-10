@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">My Application</string>
     <string name="message_no_notes">You have no notes</string>
+    <string name="hint_title">Title</string>
+    <string name="hint_content">Content</string>
 </resources>
