@@ -16,6 +16,9 @@ Libraries :
 - [ ] Store private key to remote (using archive and password)
 - [ ] Store private key offline as an image
 
+By the way, I haven't found any library to archive the private key with password.
+Maybe I will change the mechanism to combine AES and RSA algorithm
+
 ### Make it optional for :
 - [ ] Remote storage
 - [ ] Encryption storage

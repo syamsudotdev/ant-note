@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.facebook.stetho.Stetho
@@ -16,6 +15,7 @@ import net.mnsam.antnote.R
 import net.mnsam.antnote.data.local.entity.Note
 import net.mnsam.antnote.data.repository.NoteRepository
 import net.mnsam.antnote.feature.create.CreateNoteActivity
+import net.mnsam.antnote.feature.detail.DetailNoteActivity
 import net.mnsam.antnote.feature.list.adapter.NoteAdapter
 import net.mnsam.antnote.feature.list.presentation.MainPresenter
 import net.mnsam.antnote.feature.list.presentation.MainView
@@ -76,13 +76,11 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
     override fun navigateToDetail(id: Long) {
-        Log.d("Main", "navigate to detail")
-        val intent = Intent(this, CreateNoteActivity::class.java)
+        val intent = Intent(this, DetailNoteActivity::class.java)
         startActivity(intent)
     }
 
     override fun navigateToCreate() {
-        Log.d("Main", "navigate to create")
         val intent = Intent(this, CreateNoteActivity::class.java)
         startActivity(intent)
     }
