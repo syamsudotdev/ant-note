@@ -7,7 +7,7 @@ Libraries :
 - Rx
 
 To do :
-- Show note list [v]
+- Show note list [x]
 - Insert note []
 - Update note []
 - Delete note []
