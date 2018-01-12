@@ -1,9 +1,6 @@
 package net.mnsam.antnote.data.local.dao
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import net.mnsam.antnote.data.local.entity.Note
 
 /**
@@ -20,4 +17,10 @@ interface NoteDao {
 
     @Query("SELECT * FROM notes WHERE id = :id")
     fun findById(id: Long): Note
+
+    @Update
+    fun update(vararg notes: Note)
+
+    @Delete
+    fun delete(vararg notes: Note)
 }

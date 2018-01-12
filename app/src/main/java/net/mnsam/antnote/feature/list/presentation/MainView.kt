@@ -13,6 +13,4 @@ interface MainView : BaseView {
     fun observeData(observable: Observable<MutableList<Note>>)
     fun navigateToDetail(id: Long)
     fun navigateToCreate()
-    fun setupRv()
-    fun setFabListener()
 }

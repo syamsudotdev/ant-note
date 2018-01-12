@@ -8,9 +8,10 @@ import net.mnsam.antnote.feature.list.presentation.MainView
 /**
  * Created by Mochamad Noor Syamsu on 1/5/18.
  */
-class MainPresenterImpl(private val mainView: MainView, private val list: MutableList<Note>, private val noteRepository: NoteRepository) : MainPresenter {
+class MainPresenterImpl(private val mainView: MainView,
+                        private val list: MutableList<Note>,
+                        private val noteRepository: NoteRepository) : MainPresenter {
     override fun onCreate() {
-        mainView.setupRv()
         mainView.observeData(noteRepository.getObservableAllNotes())
     }
 

@@ -5,6 +5,4 @@ package net.mnsam.antnote.base
  */
 interface BaseView {
     fun toastMessage(message: String)
-    fun showLoading()
-    fun hideLoading()
 }
