@@ -21,7 +21,8 @@ class CreateNoteActivity : AppCompatActivity(), CreateView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_note)
-        actionBar.setDisplayHomeAsUpEnabled(true)
+
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

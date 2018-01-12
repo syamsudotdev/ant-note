@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.facebook.stetho.Stetho
@@ -43,12 +42,7 @@ class MainActivity : AppCompatActivity(), MainView {
         }
 
         mainPresenter.onCreate()
-        fabNoteAdd.setOnClickListener {
-            View.OnClickListener {
-                Log.d("MainMain", "FAB clicked")
-                mainPresenter.onFabClick()
-            }
-        }
+        fabNoteAdd.setOnClickListener { mainPresenter.onFabClick() }
     }
 
     override fun toastMessage(message: String) {
