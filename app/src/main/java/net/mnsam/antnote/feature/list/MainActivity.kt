@@ -7,29 +7,31 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.Toast
 import com.facebook.stetho.Stetho
+import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import kotlinx.android.synthetic.main.activity_main.*
 import net.mnsam.antnote.R
 import net.mnsam.antnote.data.local.entity.Note
-import net.mnsam.antnote.data.repository.NoteRepository
 import net.mnsam.antnote.feature.create.CreateNoteActivity
 import net.mnsam.antnote.feature.detail.DetailNoteActivity
 import net.mnsam.antnote.feature.list.adapter.NoteAdapter
 import net.mnsam.antnote.feature.list.presentation.MainPresenter
 import net.mnsam.antnote.feature.list.presentation.MainView
-import net.mnsam.antnote.feature.list.presentation.implementation.MainPresenterImpl
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), MainView {
 
     private val noteAdapter = NoteAdapter()
-    private val mainPresenter: MainPresenter =
-            MainPresenterImpl(this, mutableListOf(), NoteRepository())
-    val ID_NOTE_KEY = "id_note_key"
+    @Inject
+    lateinit var mainPresenter: MainPresenter
+    private val ID_NOTE_KEY = "id_note_key"
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+        mainPresenter.onAttach(this)
         Stetho.initializeWithDefaults(this)
         setContentView(R.layout.activity_main)
 
@@ -41,8 +43,12 @@ class MainActivity : AppCompatActivity(), MainView {
             }
         }
 
-        mainPresenter.onCreate()
         fabNoteAdd.setOnClickListener { mainPresenter.onFabClick() }
+    }
+
+    override fun onResume() {
+        mainPresenter.onResume()
+        super.onResume()
     }
 
     override fun toastMessage(message: String) {

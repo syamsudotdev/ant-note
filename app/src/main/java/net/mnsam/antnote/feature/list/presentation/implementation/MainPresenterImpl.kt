@@ -4,15 +4,19 @@ import net.mnsam.antnote.data.local.entity.Note
 import net.mnsam.antnote.data.repository.NoteRepository
 import net.mnsam.antnote.feature.list.presentation.MainPresenter
 import net.mnsam.antnote.feature.list.presentation.MainView
+import javax.inject.Inject
 
 /**
  * Created by Mochamad Noor Syamsu on 1/5/18.
  */
-class MainPresenterImpl(private val mainView: MainView,
-                        private val list: MutableList<Note>,
-                        private val noteRepository: NoteRepository) : MainPresenter {
-    override fun onCreate() {
-        mainView.observeData(noteRepository.getObservableAllNotes())
+class MainPresenterImpl
+@Inject internal constructor(
+        private val list: MutableList<Note> = mutableListOf(),
+        private val noteRepository: NoteRepository) : MainPresenter {
+    private lateinit var mainView: MainView
+
+    override fun onAttach(view: MainView) {
+        this.mainView = view
     }
 
     override fun onErrorLoad(message: String) {
@@ -20,10 +24,11 @@ class MainPresenterImpl(private val mainView: MainView,
     }
 
     override fun onLoadedData(list: MutableList<Note>) =
-            if (!list.isEmpty()) mainView.showList(list)
-            else mainView.showEmptyPage()
+            if (!list.isEmpty()) mainView.showList(list) else mainView.showEmptyPage()
 
-    override fun onResume() {}
+    override fun onResume() {
+        mainView.observeData(noteRepository.getObservableAllNotes())
+    }
 
     override fun onPause() {}
 

@@ -12,11 +12,13 @@ import net.mnsam.antnote.data.repository.NoteRepository
 import net.mnsam.antnote.feature.create.presentation.CreatePresenter
 import net.mnsam.antnote.feature.create.presentation.CreateView
 import net.mnsam.antnote.feature.create.presentation.implementation.CreatePresenterImpl
+import javax.inject.Inject
 
 class CreateNoteActivity : AppCompatActivity(), CreateView {
-
+    @Inject
+    lateinit var noteRepository: NoteRepository
     private val createPresenter: CreatePresenter =
-            CreatePresenterImpl(this, NoteRepository())
+            CreatePresenterImpl(this, noteRepository)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,36 +33,27 @@ class CreateNoteActivity : AppCompatActivity(), CreateView {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.saveActionMenu) {
-            saveAction()
-            return true
+        return when {
+            item.itemId == R.id.saveActionMenu -> {
+                this.saveAction()
+                super.onOptionsItemSelected(item)
+            }
+            item.itemId == android.R.id.home -> {
+                createPresenter.onBackAction()
+                finish()
+                super.onOptionsItemSelected(item)
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onNavigateUp(): Boolean {
-        createPresenter.onBackAction()
-        finish()
-        return super.onNavigateUp()
-    }
-
-    override fun onBackPressed() {
-        createPresenter.onBackAction()
-        finish()
-        super.onBackPressed()
     }
 
     override fun toastMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun backAction() {
-
-    }
-
     override fun saveAction() {
         val note = Note(null, noteTitle.text.toString(), noteContent.text.toString())
         createPresenter.onSaveAction(note)
+        finish()
     }
 }
