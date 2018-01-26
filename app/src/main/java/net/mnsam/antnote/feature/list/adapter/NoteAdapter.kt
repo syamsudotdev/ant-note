@@ -22,7 +22,7 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(note: Note, listener: AdapterClickListener) {
-            itemView.noteTitle.text = note.title
+            itemView.noteTitleEdit.text = note.title
             itemView.content.text = note.content
             itemView.setOnClickListener {
                 listener.onItemClick(adapterPosition)

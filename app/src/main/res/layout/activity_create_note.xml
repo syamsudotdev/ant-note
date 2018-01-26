@@ -13,7 +13,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/noteTitle"
+            android:id="@+id/noteTitleEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_title" />
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/noteContent"
+            android:id="@+id/noteContentEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_content" />

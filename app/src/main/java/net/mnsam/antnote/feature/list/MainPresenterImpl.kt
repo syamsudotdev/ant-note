@@ -1,18 +1,17 @@
-package net.mnsam.antnote.feature.list.presentation.implementation
+package net.mnsam.antnote.feature.list
 
 import net.mnsam.antnote.data.local.entity.Note
 import net.mnsam.antnote.data.repository.NoteRepository
-import net.mnsam.antnote.feature.list.presentation.MainPresenter
-import net.mnsam.antnote.feature.list.presentation.MainView
 
 /**
  * Created by Mochamad Noor Syamsu on 1/5/18.
  */
 class MainPresenterImpl(private val list: MutableList<Note> = mutableListOf(),
-                        private val noteRepository: NoteRepository) : MainPresenter {
-    private lateinit var mainView: MainView
+                        private val noteRepository: NoteRepository) : MainContract.MainPresenter {
 
-    override fun onAttach(view: MainView) {
+    private lateinit var mainView: MainContract.MainView
+
+    override fun onAttach(view: MainContract.MainView) {
         this.mainView = view
     }
 

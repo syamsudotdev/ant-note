@@ -1,17 +1,15 @@
-package net.mnsam.antnote.feature.create.presentation.implementation
+package net.mnsam.antnote.feature.create
 
 import net.mnsam.antnote.data.local.entity.Note
 import net.mnsam.antnote.data.repository.NoteRepository
-import net.mnsam.antnote.feature.create.presentation.CreatePresenter
-import net.mnsam.antnote.feature.create.presentation.CreateView
 
 /**
  * Created by Mochamad Noor Syamsu on 1/12/18.
  */
-class CreatePresenterImpl(private val noteRepository: NoteRepository) : CreatePresenter {
+class CreatePresenterImpl(private val noteRepository: NoteRepository) : CreateContract.CreatePresenter {
 
-    private lateinit var createView: CreateView
-    override fun onAttach(createView: CreateView) {
+    private lateinit var createView: CreateContract.CreateView
+    override fun onAttach(createView: CreateContract.CreateView) {
         this.createView = createView
     }
 

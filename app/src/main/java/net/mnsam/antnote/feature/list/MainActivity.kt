@@ -17,16 +17,14 @@ import net.mnsam.antnote.data.local.entity.Note
 import net.mnsam.antnote.feature.create.CreateNoteActivity
 import net.mnsam.antnote.feature.detail.DetailNoteActivity
 import net.mnsam.antnote.feature.list.adapter.NoteAdapter
-import net.mnsam.antnote.feature.list.presentation.MainPresenter
-import net.mnsam.antnote.feature.list.presentation.MainView
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), MainView {
+class MainActivity : AppCompatActivity(), MainContract.MainView {
 
     val idNoteKey = "id_note_key"
     private val noteAdapter = NoteAdapter()
     @Inject
-    lateinit var mainPresenter: MainPresenter
+    lateinit var mainPresenter: MainContract.MainPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
