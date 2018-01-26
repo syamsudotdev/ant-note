@@ -17,15 +17,15 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
     var adapterClickListener: AdapterClickListener? = null
 
     interface AdapterClickListener {
-        fun onItemClick(view: View, position: Int)
+        fun onItemClick(position: Int)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(note: Note, listener: AdapterClickListener) {
             itemView.noteTitle.text = note.title
             itemView.content.text = note.content
-            itemView.setOnClickListener { view ->
-                listener.onItemClick(view, adapterPosition)
+            itemView.setOnClickListener {
+                listener.onItemClick(adapterPosition)
             }
         }
     }

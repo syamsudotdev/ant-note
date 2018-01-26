@@ -8,6 +8,7 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import net.mnsam.antnote.di.component.AppComponent
+import net.mnsam.antnote.di.component.DaggerAppComponent
 import javax.inject.Inject
 
 /**

@@ -23,10 +23,10 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), MainView {
 
+    val idNoteKey = "id_note_key"
     private val noteAdapter = NoteAdapter()
     @Inject
     lateinit var mainPresenter: MainPresenter
-    private val ID_NOTE_KEY = "id_note_key"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(), MainView {
         listItem.adapter = noteAdapter
         listItem.layoutManager = LinearLayoutManager(this)
         noteAdapter.adapterClickListener = object : NoteAdapter.AdapterClickListener {
-            override fun onItemClick(view: View, position: Int) {
+            override fun onItemClick(position: Int) {
                 mainPresenter.onListItemClick(position)
             }
         }
@@ -51,9 +51,8 @@ class MainActivity : AppCompatActivity(), MainView {
         super.onResume()
     }
 
-    override fun toastMessage(message: String) {
+    override fun toastMessage(message: String) =
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
 
     override fun showList(list: MutableList<Note>) {
         if (listItem.visibility == View.GONE || emptyList.visibility == View.VISIBLE) {
@@ -88,7 +87,7 @@ class MainActivity : AppCompatActivity(), MainView {
 
     override fun navigateToDetail(id: Long) {
         val intent = Intent(this, DetailNoteActivity::class.java)
-        intent.putExtra(ID_NOTE_KEY, id)
+        intent.putExtra(idNoteKey, id)
         startActivity(intent)
     }
 
