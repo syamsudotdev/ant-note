@@ -10,20 +10,20 @@ import net.mnsam.antnote.data.local.entity.Note
  */
 interface MainContract {
 
-    interface MainPresenter : BasePresenter {
-        fun onAttach(view: MainView)
-        fun onListItemClick(position: Int)
-        fun onLoadedData(list: MutableList<Note>)
+    interface Presenter : BasePresenter<View> {
         fun onErrorLoad(message: String)
         fun onFabClick()
+        fun onListItemClick(position: Int)
+        fun onLoadedData(list: MutableList<Note>)
+        fun onResume()
     }
 
-    interface MainView : BaseView {
-        fun showList(list: MutableList<Note>)
-        fun showEmptyPage()
-        fun observeData(observable: Observable<MutableList<Note>>)
+    interface View : BaseView {
         fun navigateToDetail(id: Long)
         fun navigateToCreate()
+        fun observeData(observable: Observable<MutableList<Note>>)
+        fun showList(list: MutableList<Note>)
+        fun showEmptyPage()
     }
 
 }

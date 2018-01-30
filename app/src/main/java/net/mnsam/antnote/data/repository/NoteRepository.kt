@@ -29,6 +29,12 @@ class NoteRepository @Inject internal constructor(private val noteDao: NoteDao) 
                 .subscribe()
     }
 
+    fun getObservableNoteDetail(id: Long): Observable<Note> =
+            CreateObservable()
+                    .observable(Callable<Note> { getNoteDetail(id) })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+
     fun getNoteDetail(id: Long): Note = noteDao.findById(id)
 
     fun updateNoteDetail(note: Note) = noteDao.update(note)

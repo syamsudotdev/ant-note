@@ -10,13 +10,13 @@ import net.mnsam.antnote.R
 import net.mnsam.antnote.data.local.entity.Note
 import javax.inject.Inject
 
-class CreateNoteActivity : AppCompatActivity(), CreateContract.CreateView {
+class NoteActivity : AppCompatActivity(), CreateContract.View {
     @Inject
-    lateinit var createPresenter: CreateContract.CreatePresenter
+    lateinit var presenter: CreateContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
-        createPresenter.onAttach(this)
+        presenter.onAttach(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_note)
 
@@ -26,7 +26,7 @@ class CreateNoteActivity : AppCompatActivity(), CreateContract.CreateView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when {
             item.itemId == android.R.id.home -> {
-                createPresenter.onBackAction()
+                presenter.onBackAction()
                 finish()
                 super.onOptionsItemSelected(item)
             }
@@ -35,7 +35,7 @@ class CreateNoteActivity : AppCompatActivity(), CreateContract.CreateView {
     }
 
     override fun onBackPressed() {
-        createPresenter.onBackAction()
+        presenter.onBackAction()
         super.onBackPressed()
     }
 
@@ -44,7 +44,7 @@ class CreateNoteActivity : AppCompatActivity(), CreateContract.CreateView {
 
     override fun saveAction() {
         val note = Note(null, noteTitleEdit.text.toString(), noteContentEdit.text.toString())
-        createPresenter.onSaveAction(note)
+        presenter.onSaveAction(note)
         finish()
     }
 }

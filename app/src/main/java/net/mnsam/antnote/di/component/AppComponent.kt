@@ -6,10 +6,7 @@ import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import net.mnsam.antnote.ApplicationBase
-import net.mnsam.antnote.di.module.ActivityBuilder
-import net.mnsam.antnote.di.module.AppModule
-import net.mnsam.antnote.di.module.DbModule
-import net.mnsam.antnote.di.module.PresenterProviderModule
+import net.mnsam.antnote.di.module.*
 import javax.inject.Singleton
 
 /**
@@ -20,8 +17,9 @@ import javax.inject.Singleton
     AndroidSupportInjectionModule::class,
     AppModule::class,
     ActivityBuilder::class,
+    ConstantsModule::class,
     DbModule::class,
-    PresenterProviderModule::class
+    PresenterModule::class
 ])
 interface AppComponent : AndroidInjector<ApplicationBase> {
     @Component.Builder
