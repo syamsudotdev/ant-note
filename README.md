@@ -14,9 +14,10 @@ Libraries :
 - [ ] Firebase for storing data remotely
 - [ ] Client side data encryption with asymmetric key
 - [ ] Store private key to remote (using symmetric key)
+- [ ] Split and store symmetric key in different remote instace 
 - [ ] Store private key as an image
 
 ### Make it optional for :
 - [ ] Remote storage
 - [ ] Encryption storage
-- [ ] Private key storage
+- [ ] Remote private key storage
