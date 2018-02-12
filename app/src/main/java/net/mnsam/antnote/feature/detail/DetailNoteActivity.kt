@@ -2,6 +2,7 @@ package net.mnsam.antnote.feature.detail
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.widget.TextView
 import android.widget.Toast
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
@@ -26,11 +27,11 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_detail_note)
 
         detailPresenter.onAttach(this)
         idNote = intent.extras.get(constants.idNoteKey) as Long
         noteContentView.setOnLongClickListener { detailPresenter.onLongClickContent() }
-        setContentView(R.layout.activity_detail_note)
     }
 
     override fun onResume() {
@@ -56,12 +57,17 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
                 })
     }
 
-    override fun showDetail(note: Note) {}
+    override fun showDetail(note: Note) {
+        noteTitleView.text = note.title
+        noteContentView.text = note.content
+        noteTitleEdit.setText(note.title, TextView.BufferType.EDITABLE)
+        noteContentEdit.setText(note.content, TextView.BufferType.EDITABLE)
+    }
 
     override fun editMode() {
         noteTitleView.goGone()
-        tilEditTitle.goVisible()
-        svTvTitle.goGone()
-        svEditContent.goVisible()
+        noteContentView.goGone()
+        tilNoteTitleEdit.goVisible()
+        noteContentEdit.goVisible()
     }
 }

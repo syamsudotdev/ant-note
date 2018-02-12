@@ -8,7 +8,7 @@ import net.mnsam.antnote.feature.create.CreatePresenterImpl
 import net.mnsam.antnote.feature.detail.DetailContract
 import net.mnsam.antnote.feature.detail.DetailPresenter
 import net.mnsam.antnote.feature.list.MainContract
-import net.mnsam.antnote.feature.list.MainPresenterImpl
+import net.mnsam.antnote.feature.list.MainPresenter
 
 /**
  * Created by Mochamad Noor Syamsu on 1/18/18.
@@ -17,7 +17,7 @@ import net.mnsam.antnote.feature.list.MainPresenterImpl
 class PresenterModule {
     @Provides
     fun provideMainPresenter(noteRepository: NoteRepository): MainContract.Presenter =
-            MainPresenterImpl(noteRepository = noteRepository)
+            MainPresenter(noteRepository = noteRepository)
 
     @Provides
     fun provideCreatePresenter(noteRepository: NoteRepository): CreateContract.Presenter =

@@ -5,16 +5,33 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
+    android:layout_marginTop="24dp"
     android:orientation="vertical"
     tools:context=".feature.create.NoteActivity">
 
     <TextView
         android:id="@+id/noteTitleView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textSize="24sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="8dp" />
+
+    <TextView
+        android:id="@+id/noteContentView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:gravity="start"
+        android:hint="@string/hint_content"
+        android:scrollbars="vertical"
+        android:textSize="14sp" />
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/tilEditTitle"
+        android:id="@+id/tilNoteTitleEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone">
@@ -27,31 +44,14 @@
 
     </android.support.design.widget.TextInputLayout>
 
-    <ScrollView
-        android:id="@+id/svTvTitle"
+    <EditText
+        android:id="@+id/noteContentEdit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/noteContentView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </ScrollView>
-
-    <ScrollView
-        android:id="@+id/svEditContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone">
-
-        <EditText
-            android:id="@+id/noteContentEdit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_content"
-            android:visibility="gone" />
-
-    </ScrollView>
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:gravity="start"
+        android:hint="@string/hint_content"
+        android:scrollbars="vertical"
+        android:visibility="gone" />
 
 </LinearLayout>

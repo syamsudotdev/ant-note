@@ -12,7 +12,7 @@ class DetailPresenter(private val noteRepository: NoteRepository) : BasePresente
     lateinit var note: Note
 
     override fun onResume(idNote: Long) {
-        noteRepository.getObservableNoteDetail(idNote)
+        view!!.observeDetail(noteRepository.getObservableNoteDetail(idNote))
     }
 
     override fun onEditAction() {

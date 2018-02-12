@@ -32,9 +32,9 @@ class Activity : AppCompatActivity(), MainContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
         mainPresenter.onAttach(this)
         Stetho.initializeWithDefaults(this)
-        setContentView(R.layout.activity_main)
 
         listItem.adapter = noteAdapter
         listItem.layoutManager = LinearLayoutManager(this)
