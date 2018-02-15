@@ -13,17 +13,21 @@
         android:id="@+id/noteTitleView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:textSize="24sp" />
 
     <View
+        android:id="@+id/linearGrey"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_margin="8dp" />
+        android:layout_margin="8dp"
+        android:background="@android:color/darker_gray" />
 
     <TextView
         android:id="@+id/noteContentView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="8dp"
         android:background="@android:color/transparent"
         android:gravity="start"
         android:hint="@string/hint_content"
@@ -40,6 +44,7 @@
             android:id="@+id/noteTitleEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:hint="@string/hint_title" />
 
     </android.support.design.widget.TextInputLayout>
@@ -48,6 +53,7 @@
         android:id="@+id/noteContentEdit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="8dp"
         android:background="@android:color/transparent"
         android:gravity="start"
         android:hint="@string/hint_content"

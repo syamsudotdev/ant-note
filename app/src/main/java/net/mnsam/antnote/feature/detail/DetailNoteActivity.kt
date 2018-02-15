@@ -67,6 +67,7 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
     override fun editMode() {
         noteTitleView.goGone()
         noteContentView.goGone()
+        linearGrey.goGone()
         tilNoteTitleEdit.goVisible()
         noteContentEdit.goVisible()
     }
