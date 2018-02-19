@@ -14,16 +14,15 @@ import javax.inject.Inject
  * Created by Mochamad Noor Syamsu on 12/27/17.
  */
 class NoteRepository @Inject internal constructor(private val noteDao: NoteDao) {
-    private fun fetchAllNotes(): MutableList<Note> = noteDao.getAllNotes()
 
     fun getObservableAllNotes(): Observable<MutableList<Note>> {
         return CreateObservable()
-                .observable(Callable<MutableList<Note>> { fetchAllNotes() })
+                .observable(Callable<MutableList<Note>> { noteDao.getAllNotes() })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun insert(note: Note) {
+    fun insertWithCompletable(note: Note) {
         Completable.fromRunnable { noteDao.insert(note) }
                 .subscribeOn(Schedulers.io())
                 .subscribe()
@@ -31,11 +30,9 @@ class NoteRepository @Inject internal constructor(private val noteDao: NoteDao) 
 
     fun getObservableNoteDetail(id: Long): Observable<Note> =
             CreateObservable()
-                    .observable(Callable<Note> { getNoteDetail(id) })
+                    .observable(Callable<Note> { noteDao.findById(id) })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-
-    fun getNoteDetail(id: Long): Note = noteDao.findById(id)
 
     fun updateNoteDetail(note: Note) = noteDao.update(note)
 
