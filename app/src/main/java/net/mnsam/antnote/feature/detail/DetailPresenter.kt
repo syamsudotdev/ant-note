@@ -15,15 +15,6 @@ class DetailPresenter(private val noteRepository: NoteRepository) : BasePresente
         view!!.observeDetail(noteRepository.getObservableNoteDetail(idNote))
     }
 
-    override fun onEditAction() {
-
-    }
-
-    override fun onLongClickContent(): Boolean {
-        view!!.editMode()
-        return true
-    }
-
     override fun onDetailLoaded(note: Note) {
         view!!.showDetail(note)
     }
@@ -32,7 +23,12 @@ class DetailPresenter(private val noteRepository: NoteRepository) : BasePresente
         view!!.toastMessage(message)
     }
 
-    override fun onSave() {
+    override fun onEditMode(): Boolean {
+        view!!.editMode()
+        return true
+    }
 
+    override fun onSave(note: Note) {
+        noteRepository.insertWithCompletable(note)
     }
 }

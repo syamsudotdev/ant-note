@@ -6,7 +6,7 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     android:orientation="vertical"
-    tools:context=".feature.create.NoteActivity">
+    tools:context=".feature.create.CreateActivity">
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -16,7 +16,9 @@
             android:id="@+id/noteTitleEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_title" />
+            android:gravity="center_horizontal"
+            android:hint="@string/hint_title"
+            android:textSize="24sp" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -24,8 +26,8 @@
         android:id="@+id/noteContentEdit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:background="@android:color/transparent"
         android:gravity="start"
         android:hint="@string/hint_content"

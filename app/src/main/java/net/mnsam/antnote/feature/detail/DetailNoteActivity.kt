@@ -2,6 +2,8 @@ package net.mnsam.antnote.feature.detail
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
 import dagger.android.AndroidInjection
@@ -23,6 +25,7 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
     @Inject
     lateinit var constants: Constants
     private var idNote: Long = 0
+    var menu: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -31,7 +34,23 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
 
         detailPresenter.onAttach(this)
         idNote = intent.extras.get(constants.idNoteKey) as Long
-        noteContentView.setOnLongClickListener { detailPresenter.onLongClickContent() }
+        noteContentView.setOnLongClickListener { detailPresenter.onEditMode() }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        this.menu = menu
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when {
+            item.itemId == R.id.saveMenu -> {
+                save()
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onResume() {
@@ -39,8 +58,17 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
         super.onResume()
     }
 
-    override fun toastMessage(message: String) =
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    override fun editMode() {
+        menuInflater.inflate(R.menu.save_menu, menu)
+        val menuItem = menu?.findItem(R.id.saveMenu)
+        menuItem?.isVisible = true
+
+        noteTitleView.goGone()
+        noteContentView.goGone()
+        linearGrey.goGone()
+        tilNoteTitleEdit.goVisible()
+        noteContentEdit.goVisible()
+    }
 
     override fun observeDetail(observable: Observable<Note>) {
         observable.observeOn(AndroidSchedulers.mainThread())
@@ -57,6 +85,15 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
                 })
     }
 
+    override fun save() {
+        val title = noteTitleEdit.text.toString()
+        val content = noteContentEdit.text.toString()
+        if (title.isNotEmpty() && content.isNotEmpty()) {
+            val note = Note(null, title, content)
+            detailPresenter.onSave(note)
+        }
+    }
+
     override fun showDetail(note: Note) {
         noteTitleView.text = note.title
         noteContentView.text = note.content
@@ -64,11 +101,6 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
         noteContentEdit.setText(note.content, TextView.BufferType.EDITABLE)
     }
 
-    override fun editMode() {
-        noteTitleView.goGone()
-        noteContentView.goGone()
-        linearGrey.goGone()
-        tilNoteTitleEdit.goVisible()
-        noteContentEdit.goVisible()
-    }
+    override fun toastMessage(message: String) =
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }

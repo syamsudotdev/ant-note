@@ -10,12 +10,11 @@ import net.mnsam.antnote.data.local.entity.Note
 interface CreateContract {
 
     interface Presenter : BasePresenter<View> {
-        fun onBackAction()
-        fun onSaveAction(note: Note)
+        fun onSave(note: Note)
     }
 
     interface View : BaseView {
-        fun saveAction()
+        fun save()
     }
 
 }

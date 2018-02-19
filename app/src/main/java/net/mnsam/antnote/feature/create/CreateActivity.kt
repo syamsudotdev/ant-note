@@ -10,7 +10,7 @@ import net.mnsam.antnote.R
 import net.mnsam.antnote.data.local.entity.Note
 import javax.inject.Inject
 
-class NoteActivity : AppCompatActivity(), CreateContract.View {
+class CreateActivity : AppCompatActivity(), CreateContract.View {
     @Inject
     lateinit var presenter: CreateContract.Presenter
 
@@ -26,7 +26,6 @@ class NoteActivity : AppCompatActivity(), CreateContract.View {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when {
             item.itemId == android.R.id.home -> {
-                presenter.onBackAction()
                 finish()
                 super.onOptionsItemSelected(item)
             }
@@ -34,17 +33,16 @@ class NoteActivity : AppCompatActivity(), CreateContract.View {
         }
     }
 
-    override fun onBackPressed() {
-        presenter.onBackAction()
-        super.onBackPressed()
-    }
-
     override fun toastMessage(message: String) =
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
-    override fun saveAction() {
-        val note = Note(null, noteTitleEdit.text.toString(), noteContentEdit.text.toString())
-        presenter.onSaveAction(note)
+    override fun save() {
+        val title = noteTitleEdit.text.toString()
+        val content = noteContentEdit.text.toString()
+        if (title.isNotEmpty() && content.isNotEmpty()) {
+            val note = Note(null, title, content)
+            presenter.onSave(note)
+        }
         finish()
     }
 }

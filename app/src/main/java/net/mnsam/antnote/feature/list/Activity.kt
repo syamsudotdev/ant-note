@@ -13,7 +13,7 @@ import io.reactivex.observers.DisposableObserver
 import kotlinx.android.synthetic.main.activity_main.*
 import net.mnsam.antnote.R
 import net.mnsam.antnote.data.local.entity.Note
-import net.mnsam.antnote.feature.create.NoteActivity
+import net.mnsam.antnote.feature.create.CreateActivity
 import net.mnsam.antnote.feature.detail.DetailNoteActivity
 import net.mnsam.antnote.feature.list.adapter.NoteAdapter
 import net.mnsam.antnote.util.Constants
@@ -86,7 +86,7 @@ class Activity : AppCompatActivity(), MainContract.View {
     }
 
     override fun navigateToCreate() {
-        val intent = Intent(this, NoteActivity::class.java)
+        val intent = Intent(this, CreateActivity::class.java)
         startActivity(intent)
     }
 }

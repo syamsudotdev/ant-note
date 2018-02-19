@@ -13,15 +13,15 @@ interface DetailContract {
     interface Presenter : BasePresenter<View> {
         fun onResume(idNote: Long)
         fun onDetailLoaded(note: Note)
-        fun onEditAction()
         fun onErrorLoad(message: String)
-        fun onLongClickContent(): Boolean
-        fun onSave()
+        fun onEditMode(): Boolean
+        fun onSave(note: Note)
     }
 
     interface View : BaseView {
         fun editMode()
         fun observeDetail(observable: Observable<Note>)
         fun showDetail(note: Note)
+        fun save()
     }
 }
