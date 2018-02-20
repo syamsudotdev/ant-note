@@ -15,6 +15,12 @@ import javax.inject.Inject
  */
 class NoteRepository @Inject internal constructor(private val noteDao: NoteDao) {
 
+    fun delete(note: Note) {
+        Completable.fromRunnable { noteDao.delete(note) }
+                .subscribeOn(Schedulers.io())
+                .subscribe()
+    }
+
     fun getObservableAllNotes(): Observable<MutableList<Note>> {
         return CreateObservable()
                 .observable(Callable<MutableList<Note>> { noteDao.getAllNotes() })
@@ -22,19 +28,22 @@ class NoteRepository @Inject internal constructor(private val noteDao: NoteDao) 
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun insertWithCompletable(note: Note) {
+    fun getObservableNoteDetail(id: Long): Observable<Note> {
+        return CreateObservable()
+                .observable(Callable<Note> { noteDao.findById(id) })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun insert(note: Note) {
         Completable.fromRunnable { noteDao.insert(note) }
                 .subscribeOn(Schedulers.io())
                 .subscribe()
     }
 
-    fun getObservableNoteDetail(id: Long): Observable<Note> =
-            CreateObservable()
-                    .observable(Callable<Note> { noteDao.findById(id) })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-
-    fun updateNoteDetail(note: Note) = noteDao.update(note)
-
-    fun deleteNote(note: Note) = noteDao.delete(note)
+    fun update(note: Note) {
+        Completable.fromRunnable { noteDao.update(note) }
+                .subscribeOn(Schedulers.io())
+                .subscribe()
+    }
 }

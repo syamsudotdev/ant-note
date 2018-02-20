@@ -25,7 +25,7 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
     @Inject
     lateinit var constants: Constants
     private var idNote: Long = 0
-    var menu: Menu? = null
+    private var editMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -34,11 +34,14 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
 
         detailPresenter.onAttach(this)
         idNote = intent.extras.get(constants.idNoteKey) as Long
+        noteTitleView.setOnLongClickListener { detailPresenter.onEditMode() }
         noteContentView.setOnLongClickListener { detailPresenter.onEditMode() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        this.menu = menu
+        if (editMode) {
+            menuInflater.inflate(R.menu.save_menu, menu)
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -59,10 +62,8 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
     }
 
     override fun editMode() {
-        menuInflater.inflate(R.menu.save_menu, menu)
-        val menuItem = menu?.findItem(R.id.saveMenu)
-        menuItem?.isVisible = true
-
+        editMode = true
+        invalidateOptionsMenu()
         noteTitleView.goGone()
         noteContentView.goGone()
         linearGrey.goGone()
@@ -75,12 +76,12 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
                 .subscribe(object : DisposableObserver<Note>() {
                     override fun onComplete() {}
 
-                    override fun onNext(t: Note) {
-                        detailPresenter.onDetailLoaded(t)
-                    }
-
                     override fun onError(e: Throwable) {
                         detailPresenter.onErrorLoad("Failed to load data")
+                    }
+
+                    override fun onNext(t: Note) {
+                        detailPresenter.onDetailLoaded(t)
                     }
                 })
     }
@@ -89,7 +90,7 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
         val title = noteTitleEdit.text.toString()
         val content = noteContentEdit.text.toString()
         if (title.isNotEmpty() && content.isNotEmpty()) {
-            val note = Note(null, title, content)
+            val note = Note(idNote, title, content)
             detailPresenter.onSave(note)
         }
     }
@@ -101,6 +102,7 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
         noteContentEdit.setText(note.content, TextView.BufferType.EDITABLE)
     }
 
-    override fun toastMessage(message: String) =
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    override fun toastMessage(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 }

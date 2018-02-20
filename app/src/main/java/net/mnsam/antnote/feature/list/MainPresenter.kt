@@ -11,22 +11,16 @@ class MainPresenter(private var list: MutableList<Note> = mutableListOf(),
                     private val noteRepository: NoteRepository) :
         BasePresenterImpl<MainContract.View>(), MainContract.Presenter {
 
-    private lateinit var mainView: MainContract.View
+    override fun onErrorLoad(message: String) = view!!.toastMessage(message)
 
-    override fun onAttach(view: MainContract.View) {
-        this.mainView = view
-    }
+    override fun onFabClick() = view!!.navigateToCreate()
 
-    override fun onErrorLoad(message: String) = mainView.toastMessage(message)
+    override fun onListItemClick(position: Int) = view!!.navigateToDetail(list[position].id!!)
 
     override fun onLoadedData(list: MutableList<Note>) {
         this.list = list
-        if (!list.isEmpty()) mainView.showList(list) else mainView.showEmptyPage()
+        if (!list.isEmpty()) view!!.showList(list) else view!!.showEmptyPage()
     }
 
-    override fun onResume() = mainView.observeData(noteRepository.getObservableAllNotes())
-
-    override fun onListItemClick(position: Int) = mainView.navigateToDetail(list[position].id!!)
-
-    override fun onFabClick() = mainView.navigateToCreate()
+    override fun onResume() = view!!.observeData(noteRepository.getObservableAllNotes())
 }

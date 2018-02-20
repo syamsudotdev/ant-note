@@ -5,6 +5,5 @@
         android:id="@+id/saveMenu"
         android:icon="@drawable/ic_check_white_24dp"
         android:title="SAVE"
-        android:visible="false"
         app:showAsAction="always" />
 </menu>

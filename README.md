@@ -8,8 +8,8 @@ Libraries :
 
 ### To do :
 - [x] Show note list
-- [ ] Insert note
-- [ ] Update note
+- [x] Insert note
+- [x] Update note
 - [ ] Delete note
 - [ ] Firebase for storing data remotely
 - [ ] Client side data encryption with asymmetric key

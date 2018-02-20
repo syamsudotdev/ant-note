@@ -9,18 +9,18 @@ import net.mnsam.antnote.data.local.entity.Note
 
 @Dao
 interface NoteDao {
-    @Insert(onConflict = OnConflictStrategy.FAIL)
-    fun insert(note: Note): Long
-
-    @Query("SELECT * FROM notes ORDER BY id ASC")
-    fun getAllNotes(): MutableList<Note>
+    @Delete
+    fun delete(note: Note)
 
     @Query("SELECT * FROM notes WHERE id = :id")
     fun findById(id: Long): Note
 
-    @Update
-    fun update(vararg notes: Note)
+    @Query("SELECT * FROM notes ORDER BY id ASC")
+    fun getAllNotes(): MutableList<Note>
 
-    @Delete
-    fun delete(vararg notes: Note)
+    @Insert
+    fun insert(note: Note): Long
+
+    @Update
+    fun update(note: Note)
 }

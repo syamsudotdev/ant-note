@@ -10,6 +10,5 @@ import net.mnsam.antnote.data.repository.NoteRepository
 class CreatePresenter(private val noteRepository: NoteRepository) :
         BasePresenterImpl<CreateContract.View>(), CreateContract.Presenter {
 
-    override fun onSave(note: Note) =
-            noteRepository.insertWithCompletable(note)
+    override fun onSave(note: Note) = noteRepository.insert(note)
 }

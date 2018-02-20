@@ -52,8 +52,9 @@ class Activity : AppCompatActivity(), MainContract.View {
         super.onResume()
     }
 
-    override fun toastMessage(message: String) =
+    override fun toastMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 
     override fun showList(list: MutableList<Note>) {
         listItem.goVisible()
@@ -72,10 +73,12 @@ class Activity : AppCompatActivity(), MainContract.View {
                 .subscribe(object : DisposableObserver<MutableList<Note>>() {
                     override fun onNext(t: MutableList<Note>) = mainPresenter.onLoadedData(t)
 
-                    override fun onError(e: Throwable) =
-                            mainPresenter.onErrorLoad("Failed to load notes")
+                    override fun onError(e: Throwable) {
+                        mainPresenter.onErrorLoad("Failed to load notes")
+                    }
 
-                    override fun onComplete() {}
+                    override fun onComplete() {
+                    }
                 })
     }
 

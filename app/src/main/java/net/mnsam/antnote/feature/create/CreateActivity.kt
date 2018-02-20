@@ -33,8 +33,9 @@ class CreateActivity : AppCompatActivity(), CreateContract.View {
         }
     }
 
-    override fun toastMessage(message: String) =
+    override fun toastMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 
     override fun save() {
         val title = noteTitleEdit.text.toString()
