@@ -13,10 +13,10 @@ import io.reactivex.observers.DisposableObserver
 import kotlinx.android.synthetic.main.activity_main.*
 import net.mnsam.antnote.R
 import net.mnsam.antnote.data.local.entity.Note
-import net.mnsam.antnote.feature.create.CreateActivity
 import net.mnsam.antnote.feature.detail.DetailNoteActivity
 import net.mnsam.antnote.feature.list.adapter.NoteAdapter
-import net.mnsam.antnote.util.Constants
+import net.mnsam.antnote.util.InputMode
+import net.mnsam.antnote.util.IntentKeys
 import net.mnsam.antnote.util.goGone
 import net.mnsam.antnote.util.goVisible
 import javax.inject.Inject
@@ -25,31 +25,58 @@ class Activity : AppCompatActivity(), MainContract.View {
 
     private val noteAdapter = NoteAdapter()
     @Inject
-    lateinit var mainPresenter: MainContract.Presenter
-    @Inject
-    lateinit var constants: Constants
+    lateinit var presenter: MainContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mainPresenter.onAttach(this)
+        presenter.onAttach(this)
         Stetho.initializeWithDefaults(this)
 
         listItem.adapter = noteAdapter
         listItem.layoutManager = LinearLayoutManager(this)
         noteAdapter.adapterClickListener = object : NoteAdapter.AdapterClickListener {
             override fun onItemClick(position: Int) {
-                mainPresenter.onListItemClick(position)
+                presenter.onListItemClick(position)
             }
         }
 
-        fabNoteAdd.setOnClickListener { mainPresenter.onFabClick() }
+        fabNoteAdd.setOnClickListener { presenter.onFabClick() }
     }
 
     override fun onResume() {
-        mainPresenter.onResume()
+        presenter.onResume()
         super.onResume()
+    }
+
+    override fun observeData(observable: Observable<MutableList<Note>>) {
+        observable
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : DisposableObserver<MutableList<Note>>() {
+                    override fun onNext(t: MutableList<Note>) = presenter.onLoadedData(t)
+
+                    override fun onError(e: Throwable) {
+                        presenter.onErrorLoad("Failed to load notes")
+                    }
+
+                    override fun onComplete() {
+                    }
+                })
+    }
+
+    override fun navigateToDetail(id: Long) {
+        val intent = Intent(this, DetailNoteActivity::class.java)
+        intent.putExtra(IntentKeys.ID_NOTE_KEY, id)
+        intent.putExtra(IntentKeys.INPUT_MODE, InputMode.VIEW)
+        startActivity(intent)
+    }
+
+    override fun navigateToCreate() {
+        val intent = Intent(this, DetailNoteActivity::class.java)
+        intent.putExtra(IntentKeys.ID_NOTE_KEY, 0L)
+        intent.putExtra(IntentKeys.INPUT_MODE, InputMode.CREATE)
+        startActivity(intent)
     }
 
     override fun toastMessage(message: String) {
@@ -65,31 +92,5 @@ class Activity : AppCompatActivity(), MainContract.View {
     override fun showEmptyPage() {
         emptyList.goVisible()
         listItem.goGone()
-    }
-
-    override fun observeData(observable: Observable<MutableList<Note>>) {
-        observable
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : DisposableObserver<MutableList<Note>>() {
-                    override fun onNext(t: MutableList<Note>) = mainPresenter.onLoadedData(t)
-
-                    override fun onError(e: Throwable) {
-                        mainPresenter.onErrorLoad("Failed to load notes")
-                    }
-
-                    override fun onComplete() {
-                    }
-                })
-    }
-
-    override fun navigateToDetail(id: Long) {
-        val intent = Intent(this, DetailNoteActivity::class.java)
-        intent.putExtra(constants.idNoteKey, id)
-        startActivity(intent)
-    }
-
-    override fun navigateToCreate() {
-        val intent = Intent(this, CreateActivity::class.java)
-        startActivity(intent)
     }
 }

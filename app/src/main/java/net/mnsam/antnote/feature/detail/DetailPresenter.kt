@@ -11,18 +11,29 @@ class DetailPresenter(private val noteRepository: NoteRepository) : BasePresente
 
     lateinit var note: Note
 
+    override fun onCreateMode() {
+
+    }
+
     override fun onDetailLoaded(note: Note) = view!!.showDetail(note)
+
+    override fun onDiscard() {
+    }
 
     override fun onErrorLoad(message: String) = view!!.toastMessage(message)
 
-    override fun onEditMode(): Boolean {
-        view!!.editMode()
+    override fun onEditMode(inputMode: Int): Boolean {
+        view!!.editMode(inputMode)
         return true
     }
 
-    override fun onResume(idNote: Long) {
+    override fun onBeginObserve(idNote: Long) {
         view!!.observeDetail(noteRepository.getObservableNoteDetail(idNote))
     }
 
     override fun onSave(note: Note) = noteRepository.update(note)
+
+    override fun onSaveClick() = view!!.save()
+
+    override fun onViewMode() = view!!.viewMode()
 }

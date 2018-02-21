@@ -2,6 +2,7 @@ package net.mnsam.antnote.feature.detail
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
@@ -13,42 +14,61 @@ import io.reactivex.observers.DisposableObserver
 import kotlinx.android.synthetic.main.activity_detail_note.*
 import net.mnsam.antnote.R
 import net.mnsam.antnote.data.local.entity.Note
-import net.mnsam.antnote.util.Constants
+import net.mnsam.antnote.util.InputMode
+import net.mnsam.antnote.util.IntentKeys
 import net.mnsam.antnote.util.goGone
 import net.mnsam.antnote.util.goVisible
 import javax.inject.Inject
 
 class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
 
-    @Inject
-    lateinit var detailPresenter: DetailContract.Presenter
-    @Inject
-    lateinit var constants: Constants
     private var idNote: Long = 0
-    private var editMode = false
+    private var inputMode: Int = 0
+    @Inject
+    lateinit var presenter: DetailContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_note)
 
-        detailPresenter.onAttach(this)
-        idNote = intent.extras.get(constants.idNoteKey) as Long
-        noteTitleView.setOnLongClickListener { detailPresenter.onEditMode() }
-        noteContentView.setOnLongClickListener { detailPresenter.onEditMode() }
+        presenter.onAttach(this)
+        idNote = intent.extras.get(IntentKeys.ID_NOTE_KEY) as Long
+        inputMode = intent.extras.getInt(IntentKeys.INPUT_MODE)
+        noteTitleView.setOnLongClickListener { presenter.onEditMode(inputMode) }
+        noteContentView.setOnLongClickListener { presenter.onEditMode(inputMode) }
+
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        if (editMode) {
+        if (inputMode != InputMode.VIEW) {
             menuInflater.inflate(R.menu.save_menu, menu)
+            supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp)
+        } else {
+            supportActionBar!!.setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_material)
         }
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when {
-            item.itemId == R.id.saveMenu -> {
-                save()
+        return when (item.itemId) {
+            android.R.id.home -> {
+                when (inputMode) {
+                    InputMode.CREATE -> {
+                        presenter.onSaveClick()
+                        presenter.onEditMode(InputMode.CREATE)
+                    }
+                    InputMode.EDIT -> {
+                        presenter.onBeginObserve(idNote)
+                        presenter.onEditMode(InputMode.EDIT)
+                    }
+                    else -> finish()
+                }
+                true
+            }
+            R.id.saveMenu -> {
+                presenter.onSaveClick()
                 finish()
                 true
             }
@@ -56,13 +76,34 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
         }
     }
 
+    override fun onBackPressed() {
+        if (inputMode != InputMode.CREATE) {
+            presenter.onSaveClick()
+            presenter.onBeginObserve(idNote)
+            presenter.onEditMode(inputMode)
+        } else {
+            finish()
+            super.onBackPressed()
+        }
+    }
+
     override fun onResume() {
-        detailPresenter.onResume(idNote)
+        if (inputMode != InputMode.CREATE) {
+            presenter.onBeginObserve(idNote)
+        } else {
+            presenter.onEditMode(inputMode)
+        }
         super.onResume()
     }
 
-    override fun editMode() {
-        editMode = true
+    override fun onDestroy() {
+        presenter.onDetach()
+        super.onDestroy()
+    }
+
+    override fun editMode(inputMode: Int) {
+        Log.d("Detail", "Entering edit mode")
+        this.inputMode = inputMode
         invalidateOptionsMenu()
         noteTitleView.goGone()
         noteContentView.goGone()
@@ -77,13 +118,16 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
                     override fun onComplete() {}
 
                     override fun onError(e: Throwable) {
-                        detailPresenter.onErrorLoad("Failed to load data")
+                        presenter.onErrorLoad("Failed to load data")
                     }
 
                     override fun onNext(t: Note) {
-                        detailPresenter.onDetailLoaded(t)
+                        presenter.onDetailLoaded(t)
                     }
                 })
+    }
+
+    override fun promptDiscard() {
     }
 
     override fun save() {
@@ -91,7 +135,7 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
         val content = noteContentEdit.text.toString()
         if (title.isNotEmpty() && content.isNotEmpty()) {
             val note = Note(idNote, title, content)
-            detailPresenter.onSave(note)
+            presenter.onSave(note)
         }
     }
 
@@ -104,5 +148,16 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
 
     override fun toastMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun viewMode() {
+        Log.d("Detail", "Entering view mode")
+        inputMode = InputMode.VIEW
+        invalidateOptionsMenu()
+        noteTitleView.goVisible()
+        noteContentView.goVisible()
+        linearGrey.goVisible()
+        tilNoteTitleEdit.goGone()
+        noteContentEdit.goGone()
     }
 }

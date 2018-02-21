@@ -11,17 +11,23 @@ import net.mnsam.antnote.data.local.entity.Note
 interface DetailContract {
 
     interface Presenter : BasePresenter<View> {
-        fun onResume(idNote: Long)
+        fun onBeginObserve(idNote: Long)
+        fun onCreateMode()
         fun onDetailLoaded(note: Note)
+        fun onDiscard()
         fun onErrorLoad(message: String)
-        fun onEditMode(): Boolean
+        fun onEditMode(inputMode: Int): Boolean
         fun onSave(note: Note)
+        fun onSaveClick()
+        fun onViewMode()
     }
 
     interface View : BaseView {
-        fun editMode()
+        fun promptDiscard()
+        fun editMode(inputMode: Int)
         fun observeDetail(observable: Observable<Note>)
-        fun showDetail(note: Note)
         fun save()
+        fun showDetail(note: Note)
+        fun viewMode()
     }
 }
