@@ -2,7 +2,6 @@ package net.mnsam.antnote.feature.detail
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
@@ -14,6 +13,7 @@ import io.reactivex.observers.DisposableObserver
 import kotlinx.android.synthetic.main.activity_detail_note.*
 import net.mnsam.antnote.R
 import net.mnsam.antnote.data.local.entity.Note
+import net.mnsam.antnote.feature.detail.fragment.DiscardDialogFragment
 import net.mnsam.antnote.util.InputMode
 import net.mnsam.antnote.util.IntentKeys
 import net.mnsam.antnote.util.goGone
@@ -26,6 +26,8 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
     private var inputMode: Int = 0
     @Inject
     lateinit var presenter: DetailContract.Presenter
+    private var initialTitle = ""
+    private var initialContent = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -54,17 +56,8 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                when (inputMode) {
-                    InputMode.CREATE -> {
-                        presenter.onSaveClick()
-                        presenter.onEditMode(InputMode.CREATE)
-                    }
-                    InputMode.EDIT -> {
-                        presenter.onBeginObserve(idNote)
-                        presenter.onEditMode(InputMode.EDIT)
-                    }
-                    else -> finish()
-                }
+                if (noteTitleEdit.text.isEmpty() && noteContentEdit.text.isEmpty()) finish()
+                presenter.onDiscard()
                 true
             }
             R.id.saveMenu -> {
@@ -77,22 +70,11 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
     }
 
     override fun onBackPressed() {
-        if (inputMode != InputMode.CREATE) {
-            presenter.onSaveClick()
-            presenter.onBeginObserve(idNote)
-            presenter.onEditMode(inputMode)
-        } else {
-            finish()
-            super.onBackPressed()
-        }
+        if (presenter.onDiscard()) super.onBackPressed()
     }
 
     override fun onResume() {
-        if (inputMode != InputMode.CREATE) {
-            presenter.onBeginObserve(idNote)
-        } else {
-            presenter.onEditMode(inputMode)
-        }
+        presenter.onResume()
         super.onResume()
     }
 
@@ -102,7 +84,6 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
     }
 
     override fun editMode(inputMode: Int) {
-        Log.d("Detail", "Entering edit mode")
         this.inputMode = inputMode
         invalidateOptionsMenu()
         noteTitleView.goGone()
@@ -110,12 +91,24 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
         linearGrey.goGone()
         tilNoteTitleEdit.goVisible()
         noteContentEdit.goVisible()
+        initialTitle = noteTitleEdit.text.toString()
+        initialContent = noteContentEdit.text.toString()
+    }
+
+    override fun getIdNote(): Long = this.idNote
+
+    override fun getInputMode(): Int = this.inputMode
+
+    override fun isInputStateNotEquals(): Boolean {
+        return (initialTitle != noteTitleEdit.text.toString() ||
+                initialContent != noteContentEdit.text.toString())
     }
 
     override fun observeDetail(observable: Observable<Note>) {
         observable.observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : DisposableObserver<Note>() {
-                    override fun onComplete() {}
+                    override fun onComplete() {
+                    }
 
                     override fun onError(e: Throwable) {
                         presenter.onErrorLoad("Failed to load data")
@@ -128,15 +121,17 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
     }
 
     override fun promptDiscard() {
+        val discardDialogFragment = DiscardDialogFragment()
+        discardDialogFragment.discardListener = object : DiscardDialogFragment.DiscardListener {
+            override fun discard() = finish()
+        }
+        discardDialogFragment.show(supportFragmentManager, "DiscardDialogFragment")
     }
 
     override fun save() {
         val title = noteTitleEdit.text.toString()
         val content = noteContentEdit.text.toString()
-        if (title.isNotEmpty() && content.isNotEmpty()) {
-            val note = Note(idNote, title, content)
-            presenter.onSave(note)
-        }
+        presenter.onSave(title, content)
     }
 
     override fun showDetail(note: Note) {
@@ -151,7 +146,6 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
     }
 
     override fun viewMode() {
-        Log.d("Detail", "Entering view mode")
         inputMode = InputMode.VIEW
         invalidateOptionsMenu()
         noteTitleView.goVisible()

@@ -35,14 +35,8 @@ class NoteRepository @Inject internal constructor(private val noteDao: NoteDao) 
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun insert(note: Note) {
-        Completable.fromRunnable { noteDao.insert(note) }
-                .subscribeOn(Schedulers.io())
-                .subscribe()
-    }
-
-    fun update(note: Note) {
-        Completable.fromRunnable { noteDao.update(note) }
+    fun insertOrUpdate(note: Note) {
+        Completable.fromRunnable { noteDao.insertOrReplace(note) }
                 .subscribeOn(Schedulers.io())
                 .subscribe()
     }

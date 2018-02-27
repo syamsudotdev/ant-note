@@ -12,12 +12,12 @@ interface DetailContract {
 
     interface Presenter : BasePresenter<View> {
         fun onBeginObserve(idNote: Long)
-        fun onCreateMode()
         fun onDetailLoaded(note: Note)
-        fun onDiscard()
+        fun onDiscard(): Boolean
         fun onErrorLoad(message: String)
         fun onEditMode(inputMode: Int): Boolean
-        fun onSave(note: Note)
+        fun onResume()
+        fun onSave(title: String, content: String)
         fun onSaveClick()
         fun onViewMode()
     }
@@ -25,6 +25,9 @@ interface DetailContract {
     interface View : BaseView {
         fun promptDiscard()
         fun editMode(inputMode: Int)
+        fun getIdNote(): Long
+        fun getInputMode(): Int
+        fun isInputStateNotEquals(): Boolean
         fun observeDetail(observable: Observable<Note>)
         fun save()
         fun showDetail(note: Note)

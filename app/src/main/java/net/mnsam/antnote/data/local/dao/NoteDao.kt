@@ -18,8 +18,8 @@ interface NoteDao {
     @Query("SELECT * FROM notes ORDER BY id ASC")
     fun getAllNotes(): MutableList<Note>
 
-    @Insert
-    fun insert(note: Note): Long
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertOrReplace(note: Note): Long
 
     @Update
     fun update(note: Note)
