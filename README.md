@@ -15,6 +15,7 @@ Libraries :
 - [ ] Client side data encryption with asymmetric key
 - [ ] Encrypt with AES
 - [ ] Store encrypted private key to remote instance
+- [ ] Change AES password
 - [ ] Store private key as an image
 
 ### Make it optional for :
