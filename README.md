@@ -13,8 +13,8 @@ Libraries :
 - [ ] Delete note
 - [ ] Firebase for storing data remotely
 - [ ] Client side data encryption with asymmetric key
-- [ ] Store private key to remote (using symmetric key)
-- [ ] Split and store symmetric key in different remote instances 
+- [ ] Encrypt with AES
+- [ ] Store encrypted private key to remote instance
 - [ ] Store private key as an image
 
 ### Make it optional for :
