@@ -33,12 +33,7 @@ class RecyclerItemTouchHelper(private val context: Context, private val listener
         val background = ColorDrawable()
 
         background.color = Color.DKGRAY
-        background.setBounds(
-                itemView.left,
-                itemView.top,
-                itemView.right,
-                itemView.bottom
-        )
+        background.setBounds(itemView.left, itemView.top, itemView.right, itemView.bottom)
         background.draw(c)
 
         val archiveIcon = ContextCompat.getDrawable(context, R.drawable.ic_archive_white_24dp)
