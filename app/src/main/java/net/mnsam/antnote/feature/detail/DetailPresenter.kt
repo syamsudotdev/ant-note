@@ -18,12 +18,9 @@ class DetailPresenter(private val noteRepository: NoteRepository) : BasePresente
 
     override fun onDiscard(): Boolean {
         return when {
-            view!!.isInputStateNotEquals() -> {
+            view!!.getInputMode() == InputMode.VIEW -> true
+            view!!.isInputStateNotEquals() && view!!.getInputMode() != InputMode.VIEW -> {
                 view!!.promptDiscard()
-                false
-            }
-            view!!.getInputMode() != InputMode.VIEW -> {
-                view!!.viewMode()
                 false
             }
             else -> true

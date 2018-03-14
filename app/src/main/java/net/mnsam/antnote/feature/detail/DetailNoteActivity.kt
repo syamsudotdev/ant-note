@@ -56,8 +56,7 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                if (noteTitleEdit.text.isEmpty() && noteContentEdit.text.isEmpty()) finish()
-                presenter.onDiscard()
+                if (presenter.onDiscard()) finish()
                 true
             }
             R.id.saveMenu -> {
