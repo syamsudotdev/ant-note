@@ -48,7 +48,7 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
             menuInflater.inflate(R.menu.save_menu, menu)
             supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp)
         } else {
-            supportActionBar!!.setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_material)
+            supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp)
         }
         return super.onCreateOptionsMenu(menu)
     }
