@@ -11,6 +11,7 @@ import net.mnsam.antnote.data.local.entity.Note
 interface MainContract {
 
     interface Presenter : BasePresenter<View> {
+        fun onDeleteItem(position: Int)
         fun onErrorLoad(message: String)
         fun onFabClick()
         fun onListItemClick(position: Int)

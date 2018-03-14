@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.widget.Toast
 import com.facebook.stetho.Stetho
 import dagger.android.AndroidInjection
@@ -14,7 +15,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import net.mnsam.antnote.R
 import net.mnsam.antnote.data.local.entity.Note
 import net.mnsam.antnote.feature.detail.DetailNoteActivity
-import net.mnsam.antnote.feature.list.adapter.NoteAdapter
+import net.mnsam.antnote.feature.list.recycler.NoteAdapter
+import net.mnsam.antnote.feature.list.recycler.RecyclerItemTouchHelper
 import net.mnsam.antnote.util.InputMode
 import net.mnsam.antnote.util.IntentKeys
 import net.mnsam.antnote.util.goGone
@@ -41,6 +43,15 @@ class Activity : AppCompatActivity(), MainContract.View {
                 presenter.onListItemClick(position)
             }
         }
+
+        val swipeListener = object : RecyclerItemTouchHelper.SwipeListener {
+            override fun delete(position: Int) {
+                presenter.onDeleteItem(position)
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(RecyclerItemTouchHelper(this, swipeListener))
+        itemTouchHelper.attachToRecyclerView(listItem)
 
         fabNoteAdd.setOnClickListener { presenter.onFabClick() }
     }

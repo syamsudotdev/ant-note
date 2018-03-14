@@ -15,12 +15,9 @@ interface NoteDao {
     @Query("SELECT * FROM notes WHERE id = :id")
     fun findById(id: Long): Note
 
-    @Query("SELECT * FROM notes ORDER BY id ASC")
+    @Query("SELECT * FROM notes WHERE NOT(is_archived) ORDER BY id ASC")
     fun getAllNotes(): MutableList<Note>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrReplace(note: Note): Long
-
-    @Update
-    fun update(note: Note)
 }
