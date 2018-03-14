@@ -32,9 +32,9 @@ class RecyclerItemTouchHelper(private val context: Context, private val listener
         val itemHeight = itemView.height
         val background = ColorDrawable()
 
-        background.color = Color.BLACK
+        background.color = Color.DKGRAY
         background.setBounds(
-                itemView.right + dX.toInt(),
+                itemView.left,
                 itemView.top,
                 itemView.right,
                 itemView.bottom
