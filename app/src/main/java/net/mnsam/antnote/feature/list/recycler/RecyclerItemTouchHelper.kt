@@ -20,8 +20,8 @@ class RecyclerItemTouchHelper(private val context: Context, private val listener
     }
 
     override fun onChildDraw(
-            c: Canvas?,
-            recyclerView: RecyclerView?,
+            c: Canvas,
+            recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder,
             dX: Float,
             dY: Float,
@@ -32,7 +32,7 @@ class RecyclerItemTouchHelper(private val context: Context, private val listener
         val itemHeight = itemView.height
         val background = ColorDrawable()
 
-        background.color = Color.DKGRAY
+        background.color = Color.BLACK
         background.setBounds(
                 itemView.right + dX.toInt(),
                 itemView.top,
@@ -46,8 +46,8 @@ class RecyclerItemTouchHelper(private val context: Context, private val listener
         val intrinsicHeight = archiveIcon.intrinsicHeight
         val archiveIconTop = itemView.top + (itemHeight - intrinsicHeight) / 2
         val archiveIconMargin = (itemHeight - intrinsicHeight) / 2
-        val archiveIconLeft = itemView.right - archiveIconMargin - intrinsicWidth
-        val archiveIconRight = itemView.right - archiveIconMargin
+        val archiveIconLeft = itemView.left + archiveIconMargin
+        val archiveIconRight = itemView.left + archiveIconMargin - intrinsicWidth
         val archiveIconBottom = archiveIconTop + intrinsicHeight
 
         archiveIcon.setBounds(archiveIconLeft, archiveIconTop, archiveIconRight, archiveIconBottom)
@@ -61,7 +61,7 @@ class RecyclerItemTouchHelper(private val context: Context, private val listener
             viewHolder: RecyclerView.ViewHolder?,
             target: RecyclerView.ViewHolder?
     ): Boolean {
-        return false
+        return true
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int) {
