@@ -10,11 +10,16 @@ import net.mnsam.antnote.data.repository.NoteRepository
 class MainPresenter(private var list: MutableList<Note> = mutableListOf(),
                     private val noteRepository: NoteRepository) :
         BasePresenterImpl<MainContract.View>(), MainContract.Presenter {
-    override fun onDeleteItem(position: Int) {
-        val note = list[position]
-        note.isArchived = true
-        noteRepository.insertOrUpdate(note)
+
+    private var archivedNote: Note? = null
+    private var archivedPosition = -1
+
+    override fun onArchiveNote(position: Int) {
+        archivedNote = list[position]
+        archivedPosition = position
+        noteRepository.negate(list[position].id!!)
         list.removeAt(position)
+        view!!.showSnackbar()
         if (!list.isEmpty()) view!!.showList(list) else view!!.showEmptyPage()
     }
 
@@ -27,6 +32,13 @@ class MainPresenter(private var list: MutableList<Note> = mutableListOf(),
     override fun onLoadedData(list: MutableList<Note>) {
         this.list = list
         if (!list.isEmpty()) view!!.showList(list) else view!!.showEmptyPage()
+    }
+
+    override fun onRestoreNote() {
+        if (archivedPosition >= 0 && archivedNote != null) {
+            noteRepository.negate(archivedNote!!.id!!)
+            view!!.restoreNote(archivedPosition, archivedNote!!)
+        }
     }
 
     override fun onResume() = view!!.observeData(noteRepository.getObservableAllNotes())

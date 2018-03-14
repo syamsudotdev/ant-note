@@ -2,6 +2,7 @@ package net.mnsam.antnote.feature.list
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.helper.ItemTouchHelper
@@ -46,7 +47,7 @@ class Activity : AppCompatActivity(), MainContract.View {
 
         val swipeListener = object : RecyclerItemTouchHelper.SwipeListener {
             override fun delete(position: Int) {
-                presenter.onDeleteItem(position)
+                presenter.onArchiveNote(position)
             }
         }
 
@@ -54,6 +55,7 @@ class Activity : AppCompatActivity(), MainContract.View {
         itemTouchHelper.attachToRecyclerView(listItem)
 
         fabNoteAdd.setOnClickListener { presenter.onFabClick() }
+
     }
 
     override fun onResume() {
@@ -94,14 +96,22 @@ class Activity : AppCompatActivity(), MainContract.View {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
+    override fun showEmptyPage() {
+        emptyList.goVisible()
+        listItem.goGone()
+    }
+
     override fun showList(list: MutableList<Note>) {
         listItem.goVisible()
         emptyList.goGone()
         noteAdapter.changeDataSet(list)
     }
 
-    override fun showEmptyPage() {
-        emptyList.goVisible()
-        listItem.goGone()
+    override fun showSnackbar() {
+        val snackbar = Snackbar.make(rootMain, R.string.note_archived, Snackbar.LENGTH_LONG)
+        snackbar.setAction(R.string.undo_archive, { presenter.onRestoreNote() })
+        snackbar.show()
     }
+
+    override fun restoreNote(position: Int, note: Note) = noteAdapter.addToPosition(position, note)
 }

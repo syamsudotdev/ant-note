@@ -43,6 +43,11 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
         return ViewHolder(view)
     }
 
+    fun addToPosition(position: Int, note: Note) {
+        this.noteList.add(position, note)
+        notifyItemInserted(position)
+    }
+
     fun changeDataSet(noteList: MutableList<Note>) {
         this.noteList = noteList
         notifyDataSetChanged()

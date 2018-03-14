@@ -3,5 +3,6 @@
     <string name="message_no_notes">You have no notes</string>
     <string name="hint_title">Title</string>
     <string name="hint_content">Content</string>
-    <string name="save_action">SAVE</string>
+    <string name="note_archived">Note archived</string>
+    <string name="undo_archive">UNDO</string>
 </resources>

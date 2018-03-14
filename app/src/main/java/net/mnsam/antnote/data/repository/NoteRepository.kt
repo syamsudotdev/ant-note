@@ -40,4 +40,10 @@ class NoteRepository @Inject internal constructor(private val noteDao: NoteDao) 
                 .subscribeOn(Schedulers.io())
                 .subscribe()
     }
+
+    fun negate(id: Long) {
+        Completable.fromRunnable { noteDao.negateArchive(id) }
+                .subscribeOn(Schedulers.io())
+                .subscribe()
+    }
 }

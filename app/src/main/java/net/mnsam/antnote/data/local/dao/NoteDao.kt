@@ -9,6 +9,9 @@ import net.mnsam.antnote.data.local.entity.Note
 
 @Dao
 interface NoteDao {
+    @Query("UPDATE notes SET is_archived = NOT(is_archived) WHERE id = :id")
+    fun negateArchive(id: Long)
+
     @Delete
     fun delete(note: Note)
 

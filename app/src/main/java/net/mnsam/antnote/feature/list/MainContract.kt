@@ -11,11 +11,12 @@ import net.mnsam.antnote.data.local.entity.Note
 interface MainContract {
 
     interface Presenter : BasePresenter<View> {
-        fun onDeleteItem(position: Int)
+        fun onArchiveNote(position: Int)
         fun onErrorLoad(message: String)
         fun onFabClick()
         fun onListItemClick(position: Int)
         fun onLoadedData(list: MutableList<Note>)
+        fun onRestoreNote()
         fun onResume()
     }
 
@@ -23,8 +24,10 @@ interface MainContract {
         fun navigateToDetail(id: Long)
         fun navigateToCreate()
         fun observeData(observable: Observable<MutableList<Note>>)
-        fun showList(list: MutableList<Note>)
+        fun restoreNote(position: Int, note: Note)
         fun showEmptyPage()
+        fun showList(list: MutableList<Note>)
+        fun showSnackbar()
     }
 
 }
