@@ -12,8 +12,8 @@ import net.mnsam.antnote.R
 /**
  * Created by Mochamad Noor Syamsu on 3/9/18.
  */
-class RecyclerItemTouchHelper(private val context: Context, private val listener: SwipeListener) :
-        ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+class RecyclerItemTouchHelper(private val context: Context, private val listener: SwipeListener)
+    : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
 
     interface SwipeListener {
         fun delete(position: Int)
@@ -56,7 +56,7 @@ class RecyclerItemTouchHelper(private val context: Context, private val listener
             viewHolder: RecyclerView.ViewHolder?,
             target: RecyclerView.ViewHolder?
     ): Boolean {
-        return true
+        return false
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int) {
