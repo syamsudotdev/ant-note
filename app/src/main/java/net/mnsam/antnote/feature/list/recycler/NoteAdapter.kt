@@ -6,24 +6,27 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_note.view.*
 import net.mnsam.antnote.R
-import net.mnsam.antnote.data.local.entity.Note
+import net.mnsam.antnote.feature.list.MainContract
 
 /**
  * Created by Mochamad Noor Syamsu on 12/26/17.
  */
-class NoteAdapter : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
-
-    private var noteList = mutableListOf<Note>()
-    var adapterClickListener: AdapterClickListener? = null
+class NoteAdapter(val presenter: MainContract.Presenter) : RecyclerView.Adapter<NoteAdapter.ViewHolder>(), MainContract.View.NoteAdapter {
 
     interface AdapterClickListener {
         fun onItemClick(position: Int)
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(note: Note, listener: AdapterClickListener) {
-            itemView.noteTitleEdit.text = note.title
-            itemView.content.text = note.content
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), MainContract.View.NoteRowView {
+        override fun setTitle(title: String) {
+            itemView.noteTitleEdit.text = title
+        }
+
+        override fun setContent(content: String) {
+            itemView.content.text = content
+        }
+
+        override fun setClickListener(listener: AdapterClickListener) {
             itemView.setOnClickListener {
                 listener.onItemClick(adapterPosition)
             }
@@ -31,10 +34,10 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(noteList[position], adapterClickListener!!)
+        presenter.onBindNoteRowViewAtPosition(holder, position)
     }
 
-    override fun getItemCount(): Int = noteList.size
+    override fun getItemCount(): Int = presenter.getNoteCount()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.
@@ -43,13 +46,11 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
         return ViewHolder(view)
     }
 
-    fun addToPosition(position: Int, note: Note) {
-        this.noteList.add(position, note)
-        notifyItemInserted(position)
+    override fun addToPosition(position: Int) = notifyItemInserted(position)
+
+    override fun itemRangeInserted(positionStart: Int, count: Int) {
+        notifyItemRangeInserted(positionStart, count)
     }
 
-    fun changeDataSet(noteList: MutableList<Note>) {
-        this.noteList = noteList
-        notifyDataSetChanged()
-    }
+    override fun removeAtPosition(position: Int) = notifyItemRemoved(position)
 }

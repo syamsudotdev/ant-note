@@ -26,7 +26,6 @@ import javax.inject.Inject
 
 class Activity : AppCompatActivity(), MainContract.View {
 
-    private val noteAdapter = NoteAdapter()
     @Inject
     lateinit var presenter: MainContract.Presenter
 
@@ -36,14 +35,10 @@ class Activity : AppCompatActivity(), MainContract.View {
         setContentView(R.layout.activity_main)
         presenter.onAttach(this)
         Stetho.initializeWithDefaults(this)
-
+        val noteAdapter = NoteAdapter(presenter)
+        presenter.attachAdapter(noteAdapter)
         listItem.adapter = noteAdapter
         listItem.layoutManager = LinearLayoutManager(this)
-        noteAdapter.adapterClickListener = object : NoteAdapter.AdapterClickListener {
-            override fun onItemClick(position: Int) {
-                presenter.onListItemClick(position)
-            }
-        }
 
         val swipeListener = object : RecyclerItemTouchHelper.SwipeListener {
             override fun delete(position: Int) {
@@ -104,7 +99,6 @@ class Activity : AppCompatActivity(), MainContract.View {
     override fun showList(list: MutableList<Note>) {
         listItem.goVisible()
         emptyList.goGone()
-        noteAdapter.changeDataSet(list)
     }
 
     override fun showSnackbar() {
@@ -112,6 +106,4 @@ class Activity : AppCompatActivity(), MainContract.View {
         snackbar.setAction(R.string.undo_archive, { presenter.onRestoreNote() })
         snackbar.show()
     }
-
-    override fun restoreNote(position: Int, note: Note) = noteAdapter.addToPosition(position, note)
 }
