@@ -53,7 +53,7 @@ class MainPresenter(
     override fun onLoadedData(list: MutableList<Note>) {
         if (!list.isEmpty()) {
             this.list = list
-            adapter.itemRangeInserted(0, getNoteCount())
+            adapter.itemRangeChanged(0, getNoteCount())
         } else {
             view!!.showEmptyPage()
         }

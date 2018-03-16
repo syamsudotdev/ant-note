@@ -48,8 +48,8 @@ class NoteAdapter(val presenter: MainContract.Presenter) : RecyclerView.Adapter<
 
     override fun addToPosition(position: Int) = notifyItemInserted(position)
 
-    override fun itemRangeInserted(positionStart: Int, count: Int) {
-        notifyItemRangeInserted(positionStart, count)
+    override fun itemRangeChanged(positionStart: Int, count: Int) {
+        notifyItemRangeChanged(positionStart, count)
     }
 
     override fun removeAtPosition(position: Int) = notifyItemRemoved(position)

@@ -39,7 +39,7 @@ interface MainContract {
 
         interface NoteAdapter {
             fun addToPosition(position: Int)
-            fun itemRangeInserted(positionStart: Int, count: Int)
+            fun itemRangeChanged(positionStart: Int, count: Int)
             fun removeAtPosition(position: Int)
         }
 
