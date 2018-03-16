@@ -13,7 +13,7 @@ class MainPresenter(
         private val noteRepository: NoteRepository) :
         BasePresenterImpl<MainContract.View>(), MainContract.Presenter {
 
-    lateinit var adapter: MainContract.View.NoteAdapter
+    private lateinit var adapter: MainContract.View.NoteAdapter
     private var archivedNote: Note? = null
     private var archivedPosition = -1
 
@@ -27,18 +27,19 @@ class MainPresenter(
         archivedNote = list[position]
         list.removeAt(position)
         archivedPosition = position
-        noteRepository.negate(list[position].id!!)
+        noteRepository.negate(archivedNote!!.id!!)
         if (!list.isEmpty()) adapter.removeAtPosition(position) else view!!.showEmptyPage()
         view!!.showSnackbar()
     }
 
     override fun onBindNoteRowViewAtPosition(holder: MainContract.View.NoteRowView, position: Int) {
-        holder.setTitle(list[position].title)
-        holder.setContent(list[position].content)
+        val note = list[position]
+        holder.setTitle(note.title)
+        holder.setContent(note.content)
 
         val adapterClickListener = object : NoteAdapter.AdapterClickListener {
             override fun onItemClick(position: Int) {
-                view!!.navigateToDetail(list[position].id!!)
+                view!!.navigateToDetail(note.id!!)
             }
         }
 
