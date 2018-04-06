@@ -82,8 +82,8 @@ class Activity : AppCompatActivity(), MainContract.View {
 
     override fun navigateToCreate() {
         val intent = Intent(this, DetailNoteActivity::class.java)
-        intent.putExtra(IntentKeys.ID_NOTE_KEY, 0L)
-        intent.putExtra(IntentKeys.INPUT_MODE, InputMode.CREATE)
+        intent.putExtra(IntentKeys.ID_NOTE_KEY, -1L)
+        intent.putExtra(IntentKeys.INPUT_MODE, InputMode.EDIT)
         startActivity(intent)
     }
 

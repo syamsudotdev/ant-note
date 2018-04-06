@@ -14,7 +14,6 @@ import kotlinx.android.synthetic.main.activity_detail_note.*
 import net.mnsam.antnote.R
 import net.mnsam.antnote.data.local.entity.Note
 import net.mnsam.antnote.feature.detail.fragment.DiscardDialogFragment
-import net.mnsam.antnote.util.InputMode
 import net.mnsam.antnote.util.IntentKeys
 import net.mnsam.antnote.util.goGone
 import net.mnsam.antnote.util.goVisible
@@ -22,12 +21,9 @@ import javax.inject.Inject
 
 class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
 
-    private var idNote: Long = 0
-    private var inputMode: Int = 0
     @Inject
     lateinit var presenter: DetailContract.Presenter
-    private var initialTitle = ""
-    private var initialContent = ""
+    var menu: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -35,28 +31,22 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
         setContentView(R.layout.activity_detail_note)
 
         presenter.onAttach(this)
-        idNote = intent.extras.get(IntentKeys.ID_NOTE_KEY) as Long
-        inputMode = intent.extras.getInt(IntentKeys.INPUT_MODE)
-        noteTitleView.setOnLongClickListener { presenter.onEditMode(inputMode) }
-        noteContentView.setOnLongClickListener { presenter.onEditMode(inputMode) }
+        noteTitleView.setOnLongClickListener { presenter.onEditMode() }
+        noteContentView.setOnLongClickListener { presenter.onEditMode() }
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        if (inputMode != InputMode.VIEW) {
-            menuInflater.inflate(R.menu.save_menu, menu)
-            supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp)
-        } else {
-            supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp)
-        }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        this.menu = menu
+        presenter.onCreateOptionsMenu()
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                if (presenter.onDiscard()) finish()
+                presenter.onBackActionBarPressed()
                 true
             }
             R.id.saveMenu -> {
@@ -69,7 +59,7 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
     }
 
     override fun onBackPressed() {
-        if (presenter.onDiscard()) super.onBackPressed()
+        presenter.onBackPressed()
     }
 
     override fun onResume() {
@@ -82,26 +72,31 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
         super.onDestroy()
     }
 
-    override fun editMode(inputMode: Int) {
-        this.inputMode = inputMode
+    override fun createMenuSaveMode() {
+        menuInflater.inflate(R.menu.save_menu, menu)
+        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp)
+    }
+
+    override fun createArrowHomeButton() {
+        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp)
+    }
+
+    override fun editMode() {
         invalidateOptionsMenu()
         noteTitleView.goGone()
         noteContentView.goGone()
         linearGrey.goGone()
         tilNoteTitleEdit.goVisible()
         noteContentEdit.goVisible()
-        initialTitle = noteTitleEdit.text.toString()
-        initialContent = noteContentEdit.text.toString()
     }
 
-    override fun getIdNote(): Long = this.idNote
+    override fun getContentState(): String = noteContentEdit.text.toString()
 
-    override fun getInputMode(): Int = this.inputMode
+    override fun getTitleState(): String = noteTitleEdit.text.toString()
 
-    override fun isInputStateNotEquals(): Boolean {
-        return (initialTitle != noteTitleEdit.text.toString() ||
-                initialContent != noteContentEdit.text.toString())
-    }
+    override fun getIdNote(): Long = intent.extras.get(IntentKeys.ID_NOTE_KEY) as Long
+
+    override fun getInputMode(): Int = intent.extras.getInt(IntentKeys.INPUT_MODE)
 
     override fun observeDetail(observable: Observable<Note>) {
         observable.observeOn(AndroidSchedulers.mainThread())
@@ -145,7 +140,6 @@ class DetailNoteActivity : AppCompatActivity(), DetailContract.View {
     }
 
     override fun viewMode() {
-        inputMode = InputMode.VIEW
         invalidateOptionsMenu()
         noteTitleView.goVisible()
         noteContentView.goVisible()

@@ -10,51 +10,81 @@ import net.mnsam.antnote.util.InputMode
  */
 class DetailPresenter(private val noteRepository: NoteRepository) : BasePresenterImpl<DetailContract.View>(), DetailContract.Presenter {
 
+    private var idNote: Long = -1
+    private var inputMode: Int = 0
+    private var initialTitle = ""
+    private var initialContent = ""
+
+    override fun isInputStateChanged(): Boolean {
+        return (initialTitle != view!!.getTitleState() ||
+                initialContent != view!!.getContentState())
+    }
+
+    override fun isEditMode(): Boolean = inputMode == InputMode.EDIT
+
+    override fun onBackPressed() {
+        onDiscard()
+        onViewMode()
+    }
+
+    override fun onBackActionBarPressed() {
+        onDiscard()
+        onViewMode()
+    }
+
     override fun onBeginObserve(idNote: Long) {
         view!!.observeDetail(noteRepository.getObservableNoteDetail(idNote))
     }
 
+    override fun onCreateOptionsMenu() {
+        if (inputMode != InputMode.VIEW) {
+            view!!.createMenuSaveMode()
+        } else {
+            view!!.createArrowHomeButton()
+        }
+    }
+
     override fun onDetailLoaded(note: Note) = view!!.showDetail(note)
 
-    override fun onDiscard(): Boolean {
-        return when {
-            view!!.getInputMode() == InputMode.VIEW -> true
-            view!!.isInputStateNotEquals() && view!!.getInputMode() != InputMode.VIEW -> {
-                view!!.promptDiscard()
-                false
-            }
-            else -> true
-        }
+    override fun onDiscard() {
+        if (isInputStateChanged() && inputMode != InputMode.VIEW) view!!.promptDiscard()
     }
 
     override fun onErrorLoad(message: String) = view!!.toastMessage(message)
 
-    override fun onEditMode(inputMode: Int): Boolean {
-        if (inputMode == InputMode.VIEW) {
-            view!!.editMode(InputMode.EDIT)
-        } else {
-            view!!.editMode(InputMode.CREATE)
-        }
+    override fun onEditMode(): Boolean {
+        inputMode = InputMode.EDIT
+        view!!.editMode()
+        initialTitle = view!!.getTitleState()
+        initialContent = view!!.getContentState()
         return true
     }
 
     override fun onResume() {
-        val inputMode = view!!.getInputMode()
-        val idNote = view!!.getIdNote()
-        if (inputMode != InputMode.CREATE && idNote != 0L) onBeginObserve(idNote)
-        if (inputMode != InputMode.VIEW) onEditMode(inputMode)
+        if (inputMode == 0) inputMode = view!!.getInputMode()
+        idNote = view!!.getIdNote()
+        if (inputMode == InputMode.VIEW) {
+            onBeginObserve(idNote)
+            return
+        }
+        onEditMode()
+        initialTitle = view!!.getTitleState()
+        initialContent = view!!.getContentState()
+        view!!.getTitleState()
     }
 
     override fun onSave(title: String, content: String) {
         if (title.isNotEmpty() && content.isNotEmpty()) {
             val note = Note(title = title, content = content)
-            val idNote = view!!.getIdNote()
-            if (idNote != 0L) note.id = idNote
+            if (idNote >= 0L) note.id = idNote
             noteRepository.insertOrUpdate(note)
         }
     }
 
     override fun onSaveClick() = view!!.save()
 
-    override fun onViewMode() = view!!.viewMode()
+    override fun onViewMode() {
+        inputMode = InputMode.VIEW
+        view!!.viewMode()
+    }
 }
